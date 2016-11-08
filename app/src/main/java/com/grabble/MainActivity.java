@@ -20,7 +20,14 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
     @Override
     public void onClick(View v) {
-        Intent i = new Intent(getApplicationContext(), MapActivity.class);
-        startActivity(i);
+        Intent i;
+        switch(v.getId()) {
+            case R.id.button1:
+                i = new Intent(getApplicationContext(), MapActivity.class);
+                startActivity(i);
+                break;
+            default:
+                break;
+        }
     }
 }
