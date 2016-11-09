@@ -1,4 +1,4 @@
-package com.grabble;
+package com.grabble.Fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.grabble.R;
 
 
 public class GmapFragment extends Fragment implements OnMapReadyCallback{

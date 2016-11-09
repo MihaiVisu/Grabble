@@ -16,6 +16,9 @@ import android.view.MenuItem;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.grabble.Fragments.GmapFragment;
+import com.grabble.Fragments.ImportFragment;
+import com.grabble.Fragments.MainFragment;
 
 public class NavActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
