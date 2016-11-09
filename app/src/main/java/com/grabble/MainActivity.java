@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         Intent i;
         switch(v.getId()) {
             case R.id.button1:
-                i = new Intent(getApplicationContext(), MapActivity.class);
+                i = new Intent(getApplicationContext(), NavActivity.class);
                 startActivity(i);
                 break;
             default:

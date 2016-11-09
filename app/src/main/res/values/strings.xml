@@ -1,7 +1,15 @@
 <resources>
     <string name="app_name">Grabble</string>
-    <string name="title_activity_map" translatable="false">Map</string>
     <string name="button">Button</string>
     <string name="button1">Go to Map</string>
     <string name="welcome_to_grabble">Welcome to Grabble</string>
+    <string name="title_activity_nav">NavActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
