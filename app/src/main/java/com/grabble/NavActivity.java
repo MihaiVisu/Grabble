@@ -16,9 +16,9 @@ import android.view.MenuItem;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.grabble.Fragments.AchievementsFragment;
 import com.grabble.Fragments.GmapFragment;
-import com.grabble.Fragments.ImportFragment;
-import com.grabble.Fragments.MainFragment;
+import com.grabble.Fragments.ProfileFragment;
 
 public class NavActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
@@ -52,7 +52,7 @@ public class NavActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         FragmentManager fm = getFragmentManager();
-        fm.beginTransaction().replace(R.id.content_frame, new MainFragment()).commit();
+        fm.beginTransaction().replace(R.id.content_frame, new ProfileFragment()).commit();
 
     }
 
@@ -96,14 +96,12 @@ public class NavActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            fm.beginTransaction().replace(R.id.content_frame, new ImportFragment()).commit();
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.nav_profile) {
+            fm.beginTransaction().replace(R.id.content_frame, new ProfileFragment()).commit();
+        } else if (id == R.id.nav_map) {
             fm.beginTransaction().replace(R.id.content_frame, new GmapFragment()).commit();
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
+        } else if (id == R.id.nav_achievements) {
+            fm.beginTransaction().replace(R.id.content_frame, new AchievementsFragment()).commit();
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {

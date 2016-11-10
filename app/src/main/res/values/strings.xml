@@ -3,14 +3,18 @@
     <string name="button">Button</string>
     <string name="button1">Go to Map</string>
     <string name="welcome_to_grabble">Welcome to Grabble</string>
-    <string name="title_activity_nav">NavActivity</string>
+    <string name="title_activity_nav">Grabble</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
 
+    <string name="facebook_app_id">653233644857256</string>
+    <string name="fb_login_protocol_scheme">fb653233644857256</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_import_fragment">Hello blank import fragment</string>
     <string name="hello_blank_main_fragment">Hello blank main fragment</string>
+    <string name="user_name_hint">User Name</string>
 </resources>
