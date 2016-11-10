@@ -27,5 +27,7 @@
     <string name="menu_profile">My Profile</string>
     <string name="nav_header_greeting">Hello, John</string>
     <string name="nav_header_message">New letters await for you in town !</string>
+    <string name="menu_communicate">Communicate</string>
+    <string name="menu_share">Share</string>
 
 </resources>

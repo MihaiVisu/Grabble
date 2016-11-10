@@ -4,32 +4,28 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_profile"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/com_facebook_profile_picture_blank_square"
             android:title="@string/menu_profile" />
         <item
             android:id="@+id/nav_map"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@android:drawable/ic_dialog_map"
             android:title="@string/menu_map" />
         <item
             android:id="@+id/nav_achievements"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@android:drawable/ic_menu_myplaces"
             android:title="@string/menu_my_achievements" />
         <item
             android:id="@+id/nav_statistics"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="?android:attr/actionModeFindDrawable"
             android:title="@string/menu_statistics"/>
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="@string/menu_communicate">
         <menu>
             <item
                 android:id="@+id/nav_share"
                 android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:title="@string/menu_share" />
         </menu>
     </item>
 

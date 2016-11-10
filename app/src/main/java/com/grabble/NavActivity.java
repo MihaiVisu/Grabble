@@ -106,8 +106,6 @@ public class NavActivity extends AppCompatActivity
             fm.beginTransaction().replace(R.id.content_frame, new StatisticsFragment()).commit();
         } else if (id == R.id.nav_share) {
 
-        } else if (id == R.id.nav_send) {
-
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
