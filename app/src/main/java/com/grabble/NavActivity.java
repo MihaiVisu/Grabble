@@ -19,7 +19,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.grabble.Fragments.AchievementsFragment;
 import com.grabble.Fragments.GmapFragment;
 import com.grabble.Fragments.ProfileFragment;
-import com.grabble.Fragments.StatisticsFragment;
+import com.grabble.Fragments.WordsPanelFragment;
 
 public class NavActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
@@ -91,7 +91,7 @@ public class NavActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        FragmentManager fm = getFragmentManager();
+        final FragmentManager fm = getFragmentManager();
 
         // Handle navigation view item clicks here.
         int id = item.getItemId();
@@ -102,6 +102,8 @@ public class NavActivity extends AppCompatActivity
             fm.beginTransaction().replace(R.id.content_frame, new ProfileFragment()).commit();
         } else if (id == R.id.nav_achievements) {
             fm.beginTransaction().replace(R.id.content_frame, new AchievementsFragment()).commit();
+        } else if (id == R.id.words_list) {
+            fm.beginTransaction().replace(R.id.content_frame, new WordsPanelFragment()).commit();
         } else if (id == R.id.nav_share) {
 
         }
