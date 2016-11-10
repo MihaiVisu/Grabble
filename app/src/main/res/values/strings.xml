@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Grabble</string>
-    <string name="button">Button</string>
     <string name="button1">Go to Map</string>
+    <string name="button2">Instructions</string>
     <string name="welcome_to_grabble">Welcome to Grabble</string>
     <string name="title_activity_nav">Grabble</string>
 
