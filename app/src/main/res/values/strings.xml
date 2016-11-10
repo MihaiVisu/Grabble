@@ -17,4 +17,6 @@
     <string name="hello_blank_import_fragment">Hello blank import fragment</string>
     <string name="hello_blank_main_fragment">Hello blank main fragment</string>
     <string name="user_name_hint">User Name</string>
+    <string name="instructions_title">How To Play the Game</string>
+    <string name="instructions_content">The game starts lorem ipsum lorem ipsum .... ....</string>
 </resources>
