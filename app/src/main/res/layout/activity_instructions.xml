@@ -10,24 +10,32 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.grabble.InstructionsActivity">
 
-    <TextView
-        android:text="@string/instructions_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView2"
-        android:textAppearance="@android:style/TextAppearance.Material.Title"
-        android:fontFamily="sans-serif-medium"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:ignore="UselessParent">
 
-    <TextView
-        android:text="@string/instructions_content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView3"
-        android:textAppearance="@android:style/TextAppearance.Material.Body2"
-        android:textAlignment="viewStart"
-        android:layout_below="@+id/textView2"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="112dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:weightSum="1">
+
+            <TextView
+                android:text="@string/instructions_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView2"
+                android:textAppearance="@android:style/TextAppearance.Material.Title" />
+
+            <TextView
+                android:text="@string/large_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView3"
+                android:textAppearance="@android:style/TextAppearance.Material.Body2"
+                android:layout_marginTop="112dp" />
+        </LinearLayout>
+    </ScrollView>
+
 </RelativeLayout>

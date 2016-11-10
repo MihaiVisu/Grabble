@@ -1,0 +1,109 @@
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="@dimen/activity_horizontal_margin"
+    android:padding="@dimen/activity_horizontal_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.grabble.Fragments.ProfileFragment"
+    tools:showIn="@layout/fragment_profile">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/activity_horizontal_margin">
+
+            <TextView
+                android:text="@string/user_name_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/profile_user_name"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="#212121"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/profile_user_name"
+                android:text="@string/user_name_tag"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="#727272"/>
+
+        </RelativeLayout>
+        
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/activity_horizontal_margin">
+
+            <TextView
+                android:id="@+id/profile_score"
+                android:text="@string/score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="#212121"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/profile_score"
+                android:text="@string/score_tag"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="#727272"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/activity_horizontal_margin">
+
+            <TextView
+                android:id="@+id/profile_boosters"
+                android:text="@string/boosters"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="#212121"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/profile_boosters"
+                android:text="@string/boosters_tag"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="#727272"/>
+
+        </RelativeLayout>
+
+        <include layout="@layout/item_divider"/>
+
+        <Button
+            android:text="@string/show_letters_gathered"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/show_letters_gathered" />
+
+        <Button
+            android:text="@string/create_new_words"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/show_words" />
+
+        <Button
+            android:text="@string/buy_more_boosters"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/buy_boosters" />
+
+
+    </LinearLayout>
+
+</android.support.v4.widget.NestedScrollView>

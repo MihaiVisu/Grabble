@@ -52,7 +52,7 @@ public class NavActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         FragmentManager fm = getFragmentManager();
-        fm.beginTransaction().replace(R.id.content_frame, new ProfileFragment()).commit();
+        fm.beginTransaction().replace(R.id.content_frame, new GmapFragment()).commit();
 
     }
 
@@ -96,14 +96,12 @@ public class NavActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_profile) {
-            fm.beginTransaction().replace(R.id.content_frame, new ProfileFragment()).commit();
-        } else if (id == R.id.nav_map) {
+        if (id == R.id.nav_map) {
             fm.beginTransaction().replace(R.id.content_frame, new GmapFragment()).commit();
+        } else if (id == R.id.nav_profile) {
+            fm.beginTransaction().replace(R.id.content_frame, new ProfileFragment()).commit();
         } else if (id == R.id.nav_achievements) {
             fm.beginTransaction().replace(R.id.content_frame, new AchievementsFragment()).commit();
-        } else if (id == R.id.nav_statistics) {
-            fm.beginTransaction().replace(R.id.content_frame, new StatisticsFragment()).commit();
         } else if (id == R.id.nav_share) {
 
         }

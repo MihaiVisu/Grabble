@@ -70,7 +70,7 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".InstructionsActivity"></activity>
+        <activity android:name=".InstructionsActivity" />
     </application>
 
 </manifest>

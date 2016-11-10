@@ -44,7 +44,7 @@
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
         android:ems="10"
-        android:hint="@string/user_name_hint"
+        android:hint="@string/user_name_tag"
         android:id="@+id/editText"
         tools:ignore="LabelFor"
         android:layout_above="@+id/button1"
