@@ -128,6 +128,6 @@
     <string name="create_new_words">Create New Words</string>
     <string name="show_letters_gathered">Show Letters Gathered</string>
     <string name="profile_background">Profile Background</string>
-    <string name="words_list">Words List</string>
+    <string name="words_list">Create Words</string>
 
 </resources>
