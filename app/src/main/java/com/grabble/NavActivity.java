@@ -19,6 +19,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.grabble.Fragments.AchievementsFragment;
 import com.grabble.Fragments.GmapFragment;
 import com.grabble.Fragments.ProfileFragment;
+import com.grabble.Fragments.StatisticsFragment;
 
 public class NavActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
@@ -36,7 +37,7 @@ public class NavActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Letter \"E\" grabbed !", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -101,6 +102,8 @@ public class NavActivity extends AppCompatActivity
             fm.beginTransaction().replace(R.id.content_frame, new GmapFragment()).commit();
         } else if (id == R.id.nav_achievements) {
             fm.beginTransaction().replace(R.id.content_frame, new AchievementsFragment()).commit();
+        } else if (id == R.id.nav_statistics) {
+            fm.beginTransaction().replace(R.id.content_frame, new StatisticsFragment()).commit();
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {

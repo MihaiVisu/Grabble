@@ -16,6 +16,7 @@ import com.facebook.appevents.AppEventsLogger;
 public class MainActivity extends AppCompatActivity implements OnClickListener {
 
     private Button btn1, btn2;
+    private EditText editText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         btn2.setOnClickListener(this);
 
         // add change listener to the editText view
-        EditText editText = (EditText) findViewById(R.id.editText);
+        editText = (EditText) findViewById(R.id.editText);
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

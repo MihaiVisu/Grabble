@@ -13,10 +13,19 @@
     <string name="facebook_app_id">653233644857256</string>
     <string name="fb_login_protocol_scheme">fb653233644857256</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
+<!--Blank fragment text strings - will remove later-->
     <string name="hello_blank_import_fragment">Hello blank import fragment</string>
     <string name="hello_blank_main_fragment">Hello blank main fragment</string>
+    <string name="hello_blank_statistics_fragment">Hello blank statistics fragment</string>
+
     <string name="user_name_hint">User Name</string>
     <string name="instructions_title">How To Play the Game</string>
     <string name="instructions_content">The game starts lorem ipsum lorem ipsum .... ....</string>
+    <string name="menu_statistics">Statistics</string>
+    <string name="menu_my_achievements">My Achievements</string>
+    <string name="menu_map">Map</string>
+    <string name="menu_profile">My Profile</string>
+    <string name="nav_header_greeting">Hello, John</string>
+    <string name="nav_header_message">New letters await for you in town !</string>
+
 </resources>
