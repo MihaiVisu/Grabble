@@ -39,5 +39,7 @@ dependencies {
     compile 'com.android.support:support-v4:24.2.1'
     compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
+    compile 'com.braintreepayments.api:braintree:2.3.11'
+    compile 'com.braintreepayments.api:drop-in:2.3.8'
     testCompile 'junit:junit:4.12'
 }
