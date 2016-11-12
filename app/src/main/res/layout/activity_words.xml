@@ -1,0 +1,75 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_words"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.grabble.WordsActivity"
+    android:orientation="vertical">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/create_a_new_word"
+        android:inputType="text"/>
+
+    <Button
+        android:text="@string/create_word"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/create_word_button"/>
+
+    <Button
+        android:text="@string/get_suggestion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/get_suggestion_button"/>
+
+    <include layout="@layout/item_divider"/>
+
+    <!--TABLE OF WORDS-->
+
+    <TextView
+        android:text="@string/created_words"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView5"
+        android:textAppearance="@android:style/TextAppearance.Material.Title"
+        android:textAlignment="center"
+        android:paddingTop="16dp"/>
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="1"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+            <TextView
+                android:layout_column="1"
+                android:text="car"
+                android:padding="3dp" />
+            <TextView
+                android:text="Score: 24"
+                android:paddingLeft="3dp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_column="1"
+                android:text="plane"
+                android:padding="3dp" />
+            <TextView
+                android:text="Score: 40"
+                android:paddingLeft="3dp" />
+        </TableRow>
+    </TableLayout>
+
+</LinearLayout>
+
+

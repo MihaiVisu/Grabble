@@ -143,5 +143,9 @@
     <string name="distance_traveled_tag">Distance Traveled</string>
     <string name="show_my_achievements">Show My Achievements</string>
     <string name="menu_shop">Shop</string>
+    <string name="create_a_new_word">Create a new word</string>
+    <string name="created_words">Created Words</string>
+    <string name="create_word">Create Word</string>
+    <string name="get_suggestion">Get Suggestion</string>
 
 </resources>
