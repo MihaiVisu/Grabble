@@ -70,7 +70,10 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".InstructionsActivity" />
+        <activity
+            android:name=".InstructionsActivity"
+            android:label="How To Play The Game"
+            android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".LetterListActivity"
             android:label="Letters Grabbed"
@@ -79,7 +82,7 @@
         </activity>
         <activity
             android:name=".ProfileActivity"
-            android:parentActivityName="com.grabble.NavActivity"
+            android:parentActivityName=".NavActivity"
             android:label="My Profile">
         </activity>
     </application>

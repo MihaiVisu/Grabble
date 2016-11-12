@@ -99,7 +99,9 @@ public class NavActivity extends AppCompatActivity
             i = new Intent(getApplicationContext(), ProfileActivity.class);
             startActivity(i);
         } else if (id == R.id.nav_achievements) {
-        } else if (id == R.id.words_list) {
+        } else if (id == R.id.letters_list) {
+            i = new Intent(getApplicationContext(), LetterListActivity.class);
+            startActivity(i);
         } else if (id == R.id.nav_share) {
 
         }

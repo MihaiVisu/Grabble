@@ -142,5 +142,6 @@
     <string name="distance_traveled">4325 meters</string>
     <string name="distance_traveled_tag">Distance Traveled</string>
     <string name="show_my_achievements">Show My Achievements</string>
+    <string name="menu_shop">Shop</string>
 
 </resources>

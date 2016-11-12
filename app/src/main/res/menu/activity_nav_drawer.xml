@@ -8,6 +8,9 @@
         <item
             android:id="@+id/nav_achievements"
             android:title="@string/menu_my_achievements" />
+        <item
+            android:id="@+id/nav_shop"
+            android:title="@string/menu_shop" />
     </group>
 
     <group android:id="@+id/nav_menu">
@@ -15,11 +18,14 @@
             android:id="@+id/nav_map"
             android:icon="@android:drawable/ic_dialog_map"
             android:title="@string/menu_map" />
-
         <item
             android:id="@+id/words_list"
-            android:icon="?android:attr/actionModeFindDrawable"
+            android:icon="@android:drawable/ic_menu_edit"
             android:title="@string/words_list" />
+        <item
+            android:id="@+id/letters_list"
+            android:icon="?android:attr/actionModeFindDrawable"
+            android:title="@string/show_letters_gathered" />
     </group>
 
     <item android:title="@string/menu_communicate">
