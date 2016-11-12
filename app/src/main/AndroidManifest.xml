@@ -71,6 +71,17 @@
             </intent-filter>
         </activity>
         <activity android:name=".InstructionsActivity" />
+        <activity
+            android:name=".LetterListActivity"
+            android:label="Letters Grabbed"
+            android:parentActivityName=".ProfileActivity">
+
+        </activity>
+        <activity
+            android:name=".ProfileActivity"
+            android:parentActivityName="com.grabble.NavActivity"
+            android:label="My Profile">
+        </activity>
     </application>
 
 </manifest>

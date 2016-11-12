@@ -1,5 +1,6 @@
 package com.grabble;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -16,10 +17,7 @@ import android.view.MenuItem;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.grabble.Fragments.AchievementsFragment;
 import com.grabble.Fragments.GmapFragment;
-import com.grabble.Fragments.ProfileFragment;
-import com.grabble.Fragments.WordsPanelFragment;
 
 public class NavActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
@@ -91,19 +89,17 @@ public class NavActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        final FragmentManager fm = getFragmentManager();
-
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        Intent i;
+
         if (id == R.id.nav_map) {
-            fm.beginTransaction().replace(R.id.content_frame, new GmapFragment()).commit();
         } else if (id == R.id.nav_profile) {
-            fm.beginTransaction().replace(R.id.content_frame, new ProfileFragment()).commit();
+            i = new Intent(getApplicationContext(), ProfileActivity.class);
+            startActivity(i);
         } else if (id == R.id.nav_achievements) {
-            fm.beginTransaction().replace(R.id.content_frame, new AchievementsFragment()).commit();
         } else if (id == R.id.words_list) {
-            fm.beginTransaction().replace(R.id.content_frame, new WordsPanelFragment()).commit();
         } else if (id == R.id.nav_share) {
 
         }

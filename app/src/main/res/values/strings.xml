@@ -122,9 +122,11 @@
     <string name="user_name_tag">User Name</string>
     <string name="score">342</string>
     <string name="score_tag">Score</string>
-    <string name="boosters">x4</string>
-    <string name="boosters_tag">Number of Boosters Left</string>
-    <string name="buy_more_boosters">Buy More Boosters</string>
+    <string name="los_boosters">x4</string>
+    <string name="word_helpers">x1</string>
+    <string name="los_boosters_tag">Double Line of Sight Boosters Left</string>
+    <string name="word_helpers_tag">Word Helpers Left</string>
+    <string name="buy_more_boosters">Go To Shop</string>
     <string name="create_new_words">Create New Words</string>
     <string name="show_letters_gathered">Show Letters Gathered</string>
     <string name="profile_background">Profile Background</string>
@@ -133,5 +135,12 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="hello_words_fragment">Hello Words search fragment</string>
+    <string name="tokens">245</string>
+    <string name="tokens_tag">Tokens Left</string>
+    <string name="gems">12</string>
+    <string name="gems_tag">Gems Left</string>
+    <string name="distance_traveled">4325 meters</string>
+    <string name="distance_traveled_tag">Distance Traveled</string>
+    <string name="show_my_achievements">Show My Achievements</string>
 
 </resources>

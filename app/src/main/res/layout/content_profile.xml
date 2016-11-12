@@ -6,7 +6,6 @@
     android:layout_marginTop="@dimen/activity_horizontal_margin"
     android:padding="@dimen/activity_horizontal_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.grabble.Fragments.ProfileFragment"
     tools:showIn="@layout/fragment_profile">
 
     <LinearLayout
@@ -36,7 +35,84 @@
                 android:textColor="#727272"/>
 
         </RelativeLayout>
-        
+
+        <include layout="@layout/item_divider"/>
+
+        <!--Gems and Tokens section-->
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/activity_horizontal_margin">
+
+            <TextView
+                android:text="@string/tokens"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/profile_tokens"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="#212121"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/profile_tokens"
+                android:text="@string/tokens_tag"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="#727272"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/activity_horizontal_margin">
+
+            <TextView
+                android:text="@string/gems"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/profile_gems"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="#212121"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/profile_gems"
+                android:text="@string/gems_tag"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="#727272"/>
+
+        </RelativeLayout>
+
+        <include layout="@layout/item_divider"/>
+
+        <!--Statistics section-->
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/activity_horizontal_margin">
+
+            <TextView
+                android:text="@string/distance_traveled"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/profile_distance"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="#212121"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/profile_distance"
+                android:text="@string/distance_traveled_tag"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="#727272"/>
+
+        </RelativeLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -66,8 +142,8 @@
             android:paddingBottom="@dimen/activity_horizontal_margin">
 
             <TextView
-                android:id="@+id/profile_boosters"
-                android:text="@string/boosters"
+                android:id="@+id/profile_los_boosters"
+                android:text="@string/los_boosters"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
@@ -76,14 +152,42 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/profile_boosters"
-                android:text="@string/boosters_tag"
+                android:layout_below="@id/profile_los_boosters"
+                android:text="@string/los_boosters_tag"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="#727272"/>
 
         </RelativeLayout>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/activity_horizontal_margin">
+
+            <TextView
+                android:id="@+id/profile_word_helpers"
+                android:text="@string/word_helpers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="#212121"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/profile_word_helpers"
+                android:text="@string/word_helpers_tag"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="#727272"/>
+        </RelativeLayout>
+
         <include layout="@layout/item_divider"/>
+
+        <Button
+            android:text="@string/show_my_achievements"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/show_my_achievements"/>
 
         <Button
             android:text="@string/show_letters_gathered"
@@ -102,7 +206,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/buy_boosters" />
-
 
     </LinearLayout>
 
