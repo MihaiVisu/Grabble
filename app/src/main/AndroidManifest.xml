@@ -89,7 +89,11 @@
         <activity
             android:name=".WordsActivity"
             android:label="Create A New Word"
-            android:parentActivityName=".NavActivity"></activity>
+            android:parentActivityName=".NavActivity" />
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".NavActivity"/>
     </application>
 
 </manifest>
