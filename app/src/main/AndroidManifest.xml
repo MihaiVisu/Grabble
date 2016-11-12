@@ -73,18 +73,19 @@
         <activity
             android:name=".InstructionsActivity"
             android:label="How To Play The Game"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".LetterListActivity"
             android:label="Letters Grabbed"
-            android:parentActivityName=".ProfileActivity">
-
-        </activity>
+            android:parentActivityName=".ProfileActivity"></activity>
         <activity
             android:name=".ProfileActivity"
-            android:parentActivityName=".NavActivity"
-            android:label="My Profile">
-        </activity>
+            android:label="My Profile"
+            android:parentActivityName=".NavActivity"></activity>
+        <activity
+            android:name=".AchievementsActivity"
+            android:label="Achievements List"
+            android:parentActivityName=".NavActivity"></activity>
     </application>
 
 </manifest>

@@ -20,10 +20,11 @@ public class CustomListAdapter extends ArrayAdapter<String> {
     private final TextDrawable[] drawable;
 
     public CustomListAdapter(Activity context,
+                             int layout,
                              String[] itemName,
                              String[] itemDescription,
                              TextDrawable[] drawable) {
-        super(context, R.layout.activity_letter_list, itemName);
+        super(context, layout, itemName);
         // TODO Auto-generated constructor stub
 
         this.context=context;
@@ -45,5 +46,6 @@ public class CustomListAdapter extends ArrayAdapter<String> {
         txtDescription.setText(itemDescription[position]);
         imageView.setImageDrawable(drawable[position]);
         return rowView;
+
     }
 }

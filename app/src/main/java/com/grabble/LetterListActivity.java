@@ -30,7 +30,7 @@ public class LetterListActivity extends AppCompatActivity {
             drawables[i] = TextDrawable.builder().buildRound(letters[i], cgen.getRandomColor());
         }
 
-        CustomListAdapter adapter = new CustomListAdapter(this, letters, leftTags, drawables);
+        CustomListAdapter adapter = new CustomListAdapter(this, R.layout.activity_letter_list, letters, leftTags, drawables);
 
         lst.setAdapter(adapter);
 
