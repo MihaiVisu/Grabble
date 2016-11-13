@@ -221,5 +221,6 @@
 
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="or">OR</string>
+    <string name="main_logo">main_logo</string>
 
 </resources>
