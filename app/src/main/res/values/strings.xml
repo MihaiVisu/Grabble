@@ -24,7 +24,7 @@
     <string name="menu_my_achievements">My Achievements</string>
     <string name="menu_map">Map</string>
     <string name="menu_profile">My Profile</string>
-    <string name="nav_header_greeting">Hello, John</string>
+    <string name="nav_header_greeting">Hello, John_Doe</string>
     <string name="nav_header_message">New letters await for you in town !</string>
     <string name="menu_communicate">Communicate</string>
     <string name="menu_share">Share</string>
@@ -118,7 +118,7 @@
         "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
         "when a user tries to pick up one of cards.\n\n"
     </string>
-    <string name="user_name_text">john_doe</string>
+    <string name="user_name_text">John_Doe</string>
     <string name="user_name_tag">User Name</string>
     <string name="score">342</string>
     <string name="score_tag">Score</string>
@@ -160,7 +160,7 @@
     </string>
 
     <string name="pref_title_display_name">Display name</string>
-    <string name="pref_default_display_name">john_doe</string>
+    <string name="pref_default_display_name">John_Doe</string>
 
     <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
     <string-array name="pref_example_list_titles">
