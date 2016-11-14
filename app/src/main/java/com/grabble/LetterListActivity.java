@@ -19,6 +19,19 @@ public class LetterListActivity extends AppCompatActivity {
         ListView lst = (ListView)findViewById(R.id.letter_list);
 
         String[] letters = {"A", "B", "C", "E", "F", "H", "R", "T", "U", "V", "W"};
+        String[] scores = {
+                "Score: 3",
+                "Score: 20",
+                "Score: 13",
+                "Score: 1",
+                "Score: 15",
+                "Score: 9",
+                "Score: 8",
+                "Score: 2",
+                "Score: 12",
+                "Score: 21",
+                "Score: 17"
+        };
         int[] left = {4,1,3,5,1,2,3,2,1,1,1};
         String[] leftTags = new String[left.length];
         for (int i = 0; i < left.length; i++) {
@@ -30,7 +43,7 @@ public class LetterListActivity extends AppCompatActivity {
             drawables[i] = TextDrawable.builder().buildRound(letters[i], cgen.getRandomColor());
         }
 
-        CustomListAdapter adapter = new CustomListAdapter(this, R.layout.activity_letter_list, letters, leftTags, drawables);
+        CustomListAdapter adapter = new CustomListAdapter(this, R.layout.activity_letter_list, scores, leftTags, drawables);
 
         lst.setAdapter(adapter);
 

@@ -69,6 +69,12 @@
         android:id="@+id/create_word_button"/>
 
     <Button
+        android:text="@string/show_letters_gathered"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/button3" />
+
+    <Button
         android:text="@string/get_suggestion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

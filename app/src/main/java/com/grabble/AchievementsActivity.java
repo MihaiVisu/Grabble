@@ -24,15 +24,15 @@ public class AchievementsActivity extends AppCompatActivity {
 
         String[] status = {
                 "unlocked",
-                "locked",
-                "locked",
+                "locked - Reward: 3x gems, 50x tokens",
+                "locked - Reward: 2x gems",
                 "unlocked",
                 "unlocked",
                 "unlocked",
-                "locked",
-                "locked",
-                "locked",
-                "locked"
+                "locked - Reward: 500x tokens",
+                "locked - Reward: 10x gems",
+                "locked - Reward: 4x gems, 300x tokens",
+                "locked - Reward: 2x word helpers, 10x gems"
         };
 
         ColorGenerator cgen = ColorGenerator.MATERIAL;
