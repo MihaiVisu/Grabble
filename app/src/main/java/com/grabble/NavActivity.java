@@ -108,6 +108,9 @@ public class NavActivity extends AppCompatActivity
         } else if (id == R.id.words_list) {
             i = new Intent(getApplicationContext(), WordsActivity.class);
             startActivity(i);
+        } else if (id == R.id.nav_shop) {
+            i = new Intent(getApplicationContext(), ShopActivity.class);
+            startActivity(i);
         } else if (id == R.id.nav_share) {
 
         }
