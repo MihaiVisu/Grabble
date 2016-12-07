@@ -1,10 +1,14 @@
 package com.grabble;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.app.FragmentManager;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,11 +21,13 @@ import android.view.MenuItem;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.grabble.CustomClasses.DownloadWebpageTask;
 import com.grabble.Fragments.GmapFragment;
 
 public class NavActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
 
+    private String url = "http://www.inf.ed.ac.uk/teaching/courses/selp/coursework/sunday.kml";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +57,15 @@ public class NavActivity extends AppCompatActivity
 
         FragmentManager fm = getFragmentManager();
         fm.beginTransaction().replace(R.id.content_frame, new GmapFragment()).commit();
+
+        ConnectivityManager connMgr = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()) {
+            new DownloadWebpageTask().execute(url);
+        }
+        else {
+            Log.i("No connection available", "No Connection Available");
+        }
 
     }
 
