@@ -4,6 +4,7 @@ package com.grabble.CustomClasses;
 import android.os.AsyncTask;
 import android.util.Xml;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.grabble.R;
 
 import org.xmlpull.v1.XmlPullParserException;
@@ -22,7 +23,7 @@ public class DownloadWebpageTask extends AsyncTask<String, Void, String> {
     @Override
     protected String doInBackground(String... params) {
         try {
-            return downloadUrl(params[0]);
+            return loadXmlFromNetwork(params[0]);
         } catch (IOException e) {
             return "Unable to retrieve webpage";
         } catch (XmlPullParserException e) {
@@ -36,10 +37,38 @@ public class DownloadWebpageTask extends AsyncTask<String, Void, String> {
         System.out.println(result);
     }
 
-    private String downloadUrl(String myUrl) throws IOException, XmlPullParserException {
-        InputStream is;
-
+    private String loadXmlFromNetwork(String urlString) throws
+            XmlPullParserException, IOException {
+        InputStream stream = null;
         KMLParser kmlParser = new KMLParser();
+
+        List<KMLParser.Entry> entries = null;
+
+        StringBuilder htmlString = new StringBuilder();
+
+        try {
+            stream = downloadUrl(urlString);
+            entries = kmlParser.parse(stream);
+        }
+        finally {
+            if (stream != null) {
+                stream.close();
+            }
+        }
+        for (KMLParser.Entry entry:
+             entries) {
+            htmlString.append("<name>");
+            htmlString.append(entry.getName());
+            htmlString.append("</name>");
+            htmlString.append("<coordinates>");
+            htmlString.append(entry.getCoordinates().toString());
+            htmlString.append("</coordinates>");
+        }
+
+        return htmlString.toString();
+    }
+
+    private InputStream downloadUrl(String myUrl) throws IOException, XmlPullParserException {
 
         URL url = new URL(myUrl);
         HttpURLConnection conn = (HttpURLConnection)url.openConnection();
@@ -49,14 +78,6 @@ public class DownloadWebpageTask extends AsyncTask<String, Void, String> {
         conn.setDoInput(true);
         conn.connect();
 
-        is = conn.getInputStream();
-        List<KMLParser.Entry>entries = kmlParser.parse(is);
-
-        String htmlString = "";
-        for (KMLParser.Entry entry :
-                entries) {
-            System.out.println(entry.getCoordinates().toString());
-        }
-        return htmlString;
+        return conn.getInputStream();
     }
 }

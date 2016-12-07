@@ -44,7 +44,7 @@ public class KMLParser {
 
     }
 
-    List<Entry> parse(InputStream in) throws XmlPullParserException,
+    public List<Entry> parse(InputStream in) throws XmlPullParserException,
             IOException {
         try {
             XmlPullParser parser = Xml.newPullParser();
@@ -76,7 +76,7 @@ public class KMLParser {
     }
 
     private Entry readEntry(XmlPullParser parser) throws XmlPullParserException, IOException {
-        parser.require(XmlPullParser.START_TAG, ns, "entry");
+        parser.require(XmlPullParser.START_TAG, ns, "Placemark");
         String title = null;
         String description = null;
         LatLng coordinates = null;
@@ -92,7 +92,7 @@ public class KMLParser {
                 case "description":
                     description = readDescription(parser);
                     break;
-                case "coordinates":
+                case "Point":
                     coordinates = readCoordinates(parser);
                     break;
                 default:
@@ -114,13 +114,16 @@ public class KMLParser {
     // Processes link tags in the feed.
     private LatLng readCoordinates(XmlPullParser parser) throws IOException, XmlPullParserException {
         LatLng coordinates;
-        parser.require(XmlPullParser.START_TAG, ns, "coordinates");
+        parser.require(XmlPullParser.START_TAG, ns, "Point");
+        parser.nextTag();
         String[] coordString = readText(parser).split(",");
         coordinates = new LatLng(
                 Double.parseDouble(coordString[1]),
                 Double.parseDouble(coordString[0])
         );
         parser.require(XmlPullParser.END_TAG, ns, "coordinates");
+        parser.nextTag();
+        parser.require(XmlPullParser.END_TAG, ns, "Point");
         return coordinates;
     }
 
@@ -152,7 +155,7 @@ public class KMLParser {
             }
             String name = parser.getName();
             // Starts by looking for the entry tag
-            if (name.equals("placemark")) {
+            if (name.equals("Placemark")) {
                 entries.add(readEntry(parser));
             } else {
                 skip(parser);
