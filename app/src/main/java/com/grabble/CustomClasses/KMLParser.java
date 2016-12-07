@@ -3,6 +3,8 @@ package com.grabble.CustomClasses;
 
 import android.util.Xml;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -11,17 +13,45 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class KMLParser {
     public static final String ns = null;
 
-    public List parse(InputStream in) throws XmlPullParserException,
+    public static class Entry {
+        private String name;
+        private String description;
+        private LatLng coordinates;
+
+        private Entry(String name,
+                      String description,
+                      LatLng coordinates) {
+            this.name = name;
+            this.description = description;
+            this.coordinates = coordinates;
+        }
+
+        public String getName() {
+            return this.name;
+        }
+
+        public String getDescription() {
+            return this.description;
+        }
+
+        public LatLng getCoordinates() {
+            return this.coordinates;
+        }
+
+    }
+
+    List<Entry> parse(InputStream in) throws XmlPullParserException,
             IOException {
         try {
             XmlPullParser parser = Xml.newPullParser();
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
             parser.setInput(in, null);
             parser.nextTag();
-            return readFeed(parser);
+            return readKml(parser);
         }
         finally {
             in.close();
@@ -48,55 +78,57 @@ public class KMLParser {
     private Entry readEntry(XmlPullParser parser) throws XmlPullParserException, IOException {
         parser.require(XmlPullParser.START_TAG, ns, "entry");
         String title = null;
-        String summary = null;
-        String link = null;
+        String description = null;
+        LatLng coordinates = null;
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
             }
             String name = parser.getName();
-            if (name.equals("title")) {
-                title = readTitle(parser);
-            } else if (name.equals("summary")) {
-                summary = readSummary(parser);
-            } else if (name.equals("link")) {
-                link = readLink(parser);
-            } else {
-                skip(parser);
+            switch (name) {
+                case "name":
+                    title = readName(parser);
+                    break;
+                case "description":
+                    description = readDescription(parser);
+                    break;
+                case "coordinates":
+                    coordinates = readCoordinates(parser);
+                    break;
+                default:
+                    skip(parser);
+                    break;
             }
         }
-        return new Entry(title, summary, link);
+        return new Entry(title, description, coordinates);
     }
 
     // Processes title tags in the feed.
-    private String readTitle(XmlPullParser parser) throws IOException, XmlPullParserException {
-        parser.require(XmlPullParser.START_TAG, ns, "title");
+    private String readName(XmlPullParser parser) throws IOException, XmlPullParserException {
+        parser.require(XmlPullParser.START_TAG, ns, "name");
         String title = readText(parser);
-        parser.require(XmlPullParser.END_TAG, ns, "title");
+        parser.require(XmlPullParser.END_TAG, ns, "name");
         return title;
     }
 
     // Processes link tags in the feed.
-    private String readLink(XmlPullParser parser) throws IOException, XmlPullParserException {
-        String link = "";
-        parser.require(XmlPullParser.START_TAG, ns, "link");
-        String tag = parser.getName();
-        String relType = parser.getAttributeValue(null, "rel");
-        if (tag.equals("link")) {
-            if (relType.equals("alternate")){
-                link = parser.getAttributeValue(null, "href");
-                parser.nextTag();
-            }
-        }
-        parser.require(XmlPullParser.END_TAG, ns, "link");
-        return link;
+    private LatLng readCoordinates(XmlPullParser parser) throws IOException, XmlPullParserException {
+        LatLng coordinates;
+        parser.require(XmlPullParser.START_TAG, ns, "coordinates");
+        String[] coordString = readText(parser).split(",");
+        coordinates = new LatLng(
+                Double.parseDouble(coordString[1]),
+                Double.parseDouble(coordString[0])
+        );
+        parser.require(XmlPullParser.END_TAG, ns, "coordinates");
+        return coordinates;
     }
 
     // Processes summary tags in the feed.
-    private String readSummary(XmlPullParser parser) throws IOException, XmlPullParserException {
-        parser.require(XmlPullParser.START_TAG, ns, "summary");
+    private String readDescription(XmlPullParser parser) throws IOException, XmlPullParserException {
+        parser.require(XmlPullParser.START_TAG, ns, "description");
         String summary = readText(parser);
-        parser.require(XmlPullParser.END_TAG, ns, "summary");
+        parser.require(XmlPullParser.END_TAG, ns, "description");
         return summary;
     }
 
@@ -110,17 +142,17 @@ public class KMLParser {
         return result;
     }
 
-    private List readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
+    private List readKml(XmlPullParser parser) throws XmlPullParserException, IOException {
         List entries = new ArrayList();
 
-        parser.require(XmlPullParser.START_TAG, ns, "feed");
+        parser.require(XmlPullParser.START_TAG, ns, "kml");
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
             }
             String name = parser.getName();
             // Starts by looking for the entry tag
-            if (name.equals("entry")) {
+            if (name.equals("placemark")) {
                 entries.add(readEntry(parser));
             } else {
                 skip(parser);

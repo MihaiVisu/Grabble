@@ -2,6 +2,11 @@ package com.grabble.CustomClasses;
 
 
 import android.os.AsyncTask;
+import android.util.Xml;
+
+import com.grabble.R;
+
+import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,6 +15,7 @@ import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 
 public class DownloadWebpageTask extends AsyncTask<String, Void, String> {
 
@@ -19,6 +25,9 @@ public class DownloadWebpageTask extends AsyncTask<String, Void, String> {
             return downloadUrl(params[0]);
         } catch (IOException e) {
             return "Unable to retrieve webpage";
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+            return "Error from xml parser";
         }
     }
 
@@ -27,40 +36,27 @@ public class DownloadWebpageTask extends AsyncTask<String, Void, String> {
         System.out.println(result);
     }
 
-    public String readIt(InputStream stream, int len) throws IOException,
-            UnsupportedEncodingException{
-        Reader reader = null;
-        reader = new InputStreamReader(stream, "UTF-8");
-        char[] buffer = new char[len];
-        reader.read(buffer);
-        return new String(buffer);
-    }
+    private String downloadUrl(String myUrl) throws IOException, XmlPullParserException {
+        InputStream is;
 
-    private String downloadUrl(String myUrl) throws IOException {
-        InputStream is = null;
-        int len = 500;
+        KMLParser kmlParser = new KMLParser();
 
-        try {
-            URL url = new URL(myUrl);
-            HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-            conn.setReadTimeout(10000);
-            conn.setConnectTimeout(15000);
-            conn.setRequestMethod("GET");
-            conn.setDoInput(true);
-            conn.connect();
+        URL url = new URL(myUrl);
+        HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+        conn.setReadTimeout(10000);
+        conn.setConnectTimeout(15000);
+        conn.setRequestMethod("GET");
+        conn.setDoInput(true);
+        conn.connect();
 
-            int response = conn.getResponseCode();
-            is = conn.getInputStream();
-            String contentAsString = readIt(is, len);
-            return contentAsString;
+        is = conn.getInputStream();
+        List<KMLParser.Entry>entries = kmlParser.parse(is);
 
-        } catch (IOException e) {
-            return "Unable to get response.";
+        String htmlString = "";
+        for (KMLParser.Entry entry :
+                entries) {
+            System.out.println(entry.getCoordinates().toString());
         }
-        finally {
-            if (is != null) {
-                is.close();
-            }
-        }
+        return htmlString;
     }
 }
