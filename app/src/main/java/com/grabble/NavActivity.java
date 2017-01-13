@@ -1,14 +1,10 @@
 package com.grabble;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.app.FragmentManager;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -21,30 +17,10 @@ import android.view.MenuItem;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.grabble.CustomClasses.DownloadWebpageTask;
 import com.grabble.Fragments.GmapFragment;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Locale;
-import java.util.TimeZone;
 
 public class NavActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
-
-    private String getUrl() {
-
-        String[] days = {
-                "monday", "tuesday", "wednesday", "thursday",
-                "friday", "saturday", "sunday"
-        };
-        Calendar c = Calendar.getInstance();
-
-        return "http://www.inf.ed.ac.uk/teaching/courses/selp/coursework/" +
-                days[c.get(Calendar.DAY_OF_WEEK)-1] + ".kml";
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,15 +50,6 @@ public class NavActivity extends AppCompatActivity
 
         FragmentManager fm = getFragmentManager();
         fm.beginTransaction().replace(R.id.content_frame, new GmapFragment()).commit();
-
-        ConnectivityManager connMgr = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isConnected()) {
-            new DownloadWebpageTask().execute(getUrl());
-        }
-        else {
-            Log.i("No connection available", "No Connection Available");
-        }
 
     }
 

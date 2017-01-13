@@ -3,12 +3,17 @@ package com.grabble.Fragments;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.nfc.Tag;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.renderscript.ScriptGroup;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -30,19 +35,35 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.kml.KmlLayer;
+import com.google.maps.android.kml.KmlPlacemark;
+import com.grabble.CustomClasses.KMLParser;
 import com.grabble.R;
+
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 
 public class GmapFragment extends Fragment implements
         OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
-    private LatLng myPosition;
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
     private GoogleMap mMap;
     private Circle grabbingRadius, lineOfSight;
+
+    private ArrayList<Location> locations = new ArrayList<Location>();
+    private ArrayList<Marker> markers = new ArrayList<Marker>();
 
     @Nullable
     @Override
@@ -64,6 +85,18 @@ public class GmapFragment extends Fragment implements
                 .findFragmentById(R.id.map);
 
         fragment.getMapAsync(this);
+    }
+
+    private String getUrl() {
+
+        String[] days = {
+                "monday", "tuesday", "wednesday", "thursday",
+                "friday", "saturday", "sunday"
+        };
+        Calendar c = Calendar.getInstance();
+
+        return "http://www.inf.ed.ac.uk/teaching/courses/selp/coursework/" +
+                days[c.get(Calendar.DAY_OF_WEEK)-1] + ".kml";
     }
 
     @Override
@@ -89,7 +122,84 @@ public class GmapFragment extends Fragment implements
         }
         mMap.setMyLocationEnabled(true);
 
+        ConnectivityManager connMgr = (ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()) {
+            new DownloadWebpageTask().execute(getUrl());
+        }
+        else {
+            Log.i("No connection available", "No Connection Available");
+        }
+
     }
+
+    private class DownloadWebpageTask extends AsyncTask<String, Void, List<KMLParser.Entry>> {
+
+        @Override
+        protected List<KMLParser.Entry> doInBackground(String... params) {
+            try {
+                return loadXmlFromNetwork(params[0]);
+            } catch (IOException | XmlPullParserException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(List<KMLParser.Entry> result) {
+                locations = new ArrayList<Location>();
+
+                for (KMLParser.Entry entry : result) {
+                    String letterDescription = entry.getDescription();
+                    LatLng coordinates = entry.getCoordinates();
+
+                    Location loc = new Location("Provider");
+                    loc.setLatitude(coordinates.latitude);
+                    loc.setLongitude(coordinates.longitude);
+                    // add new created location to locations array
+                    locations.add(loc);
+                    // add new created marker to markers array
+                    markers.add(mMap.addMarker(new MarkerOptions()
+                            .position(coordinates)
+                            .title(letterDescription)));
+                }
+        }
+
+        private List<KMLParser.Entry> loadXmlFromNetwork(String urlString) throws
+                XmlPullParserException, IOException {
+            InputStream stream = null;
+            KMLParser kmlParser = new KMLParser();
+
+            List<KMLParser.Entry> entries = null;
+
+            StringBuilder htmlString = new StringBuilder();
+
+            try {
+                stream = downloadUrl(urlString);
+                entries = kmlParser.parse(stream);
+            }
+            finally {
+                if (stream != null) {
+                    stream.close();
+                }
+            }
+            return entries;
+        }
+
+        private InputStream downloadUrl(String myUrl) throws IOException, XmlPullParserException {
+
+            URL url = new URL(myUrl);
+            HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+            conn.setReadTimeout(10000);
+            conn.setConnectTimeout(15000);
+            conn.setRequestMethod("GET");
+            conn.setDoInput(true);
+            conn.connect();
+
+            return conn.getInputStream();
+        }
+    }
+
 
     @TargetApi(Build.VERSION_CODES.M)
     private void createLocationRequest() {
@@ -117,12 +227,12 @@ public class GmapFragment extends Fragment implements
         if (mLastLocation!= null && mMap != null) {
             lineOfSight = mMap.addCircle(new CircleOptions()
                     .center(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()))
-                    .radius(100)
+                    .radius(50)
                     .strokeColor(Color.TRANSPARENT)
                     .fillColor(Color.parseColor("#70303F9F")));
             grabbingRadius = mMap.addCircle(new CircleOptions()
                     .center(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()))
-                    .radius(50)
+                    .radius(10)
                     .strokeColor(Color.TRANSPARENT)
                     .fillColor(Color.parseColor("#703F51B5")));
         }
