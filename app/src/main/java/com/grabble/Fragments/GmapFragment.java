@@ -56,8 +56,13 @@ public class GmapFragment extends Fragment implements
     private GoogleMap mMap;
     private Circle grabbingRadius, lineOfSight;
 
+    // distances in meters
+    private int lineOfSightDistance = 50,
+                grabbingRadiusDistance = 10;
+
     private ArrayList<Location> locations = new ArrayList<Location>();
     private ArrayList<Marker> markers = new ArrayList<Marker>();
+    private ArrayList<Marker> visibleMarkers = new ArrayList<Marker>();
 
     @Nullable
     @Override
@@ -163,9 +168,12 @@ public class GmapFragment extends Fragment implements
                     // add new created location to locations array
                     locations.add(loc);
                     // add new created marker to markers array
-                    markers.add(mMap.addMarker(new MarkerOptions()
+                    Marker marker = mMap.addMarker(new MarkerOptions()
                             .position(coordinates)
-                            .title(letterDescription)));
+                            .title(letterDescription));
+                    markers.add(marker);
+                    // set initial visibility of markers to none
+                    marker.setVisible(false);
                 }
         }
 
@@ -231,12 +239,12 @@ public class GmapFragment extends Fragment implements
         if (mLastLocation!= null && mMap != null) {
             lineOfSight = mMap.addCircle(new CircleOptions()
                     .center(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()))
-                    .radius(50)
+                    .radius(lineOfSightDistance)
                     .strokeColor(Color.TRANSPARENT)
                     .fillColor(Color.parseColor("#70303F9F")));
             grabbingRadius = mMap.addCircle(new CircleOptions()
                     .center(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()))
-                    .radius(10)
+                    .radius(grabbingRadiusDistance)
                     .strokeColor(Color.TRANSPARENT)
                     .fillColor(Color.parseColor("#703F51B5")));
         }
@@ -260,6 +268,27 @@ public class GmapFragment extends Fragment implements
         }
         if (lineOfSight != null) {
             lineOfSight.setCenter(new LatLng(location.getLatitude(), location.getLongitude()));
+        }
+
+        // set all visibleMarkers to false
+        for (Marker marker: visibleMarkers) {
+            marker.setVisible(false);
+        }
+
+        // clear efficiently visibleMarkers array after location change
+        visibleMarkers.clear();
+
+        // set new markers visibility to true
+        for (Marker marker: markers) {
+            float[] distance = new float[2];
+
+            Location.distanceBetween(location.getLatitude(), location.getLongitude(),
+                    marker.getPosition().latitude, marker.getPosition().longitude, distance);
+
+            if (distance[0] < lineOfSight.getRadius()) {
+                marker.setVisible(true);
+                visibleMarkers.add(marker);
+            }
         }
     }
 
