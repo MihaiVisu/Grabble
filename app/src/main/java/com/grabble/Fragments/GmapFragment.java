@@ -221,8 +221,8 @@ public class GmapFragment extends Fragment implements
         }
 
         LocationRequest mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(10000);
-        mLocationRequest.setFastestInterval(5000);
+        mLocationRequest.setInterval(1000);
+        mLocationRequest.setFastestInterval(1000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
@@ -236,7 +236,7 @@ public class GmapFragment extends Fragment implements
             requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 100);
         }
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        if (mLastLocation!= null && mMap != null) {
+        if (mLastLocation!= null && mMap != null && lineOfSight == null && grabbingRadius == null) {
             lineOfSight = mMap.addCircle(new CircleOptions()
                     .center(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()))
                     .radius(lineOfSightDistance)
@@ -263,6 +263,7 @@ public class GmapFragment extends Fragment implements
 
     @Override
     public void onLocationChanged(Location location) {
+        System.out.println("Location Changed " + location.toString());
         if (grabbingRadius != null) {
             grabbingRadius.setCenter(new LatLng(location.getLatitude(), location.getLongitude()));
         }
