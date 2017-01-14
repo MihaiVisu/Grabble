@@ -14,6 +14,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -44,7 +46,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class GmapFragment extends Fragment implements
@@ -60,9 +64,11 @@ public class GmapFragment extends Fragment implements
     private int lineOfSightDistance = 50,
                 grabbingRadiusDistance = 10;
 
-    private ArrayList<Location> locations = new ArrayList<Location>();
-    private ArrayList<Marker> markers = new ArrayList<Marker>();
-    private ArrayList<Marker> visibleMarkers = new ArrayList<Marker>();
+    private ArrayList<Location> locations = new ArrayList<>();
+    private ArrayList<Marker> markers = new ArrayList<>();
+    private ArrayList<Marker> visibleMarkers = new ArrayList<>();
+    private ArrayList<Marker> markersInRadius = new ArrayList<>();
+    private Map<Marker, Boolean> grabbedMarkers = new HashMap<>();
 
     @Nullable
     @Override
@@ -73,6 +79,28 @@ public class GmapFragment extends Fragment implements
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String message;
+                if (markersInRadius.isEmpty()) {
+                    message = "No Letter Grabbed!";
+                }
+                else message = "New Letters Grabbed!";
+                Snackbar.make(view, message, Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+
+                for (Marker marker : markersInRadius) {
+                    marker.setVisible(false);
+                    // mark marker as grabbed
+                    grabbedMarkers.put(marker, true);
+                }
+
+                markersInRadius.clear();
+            }
+        });
 
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this.getActivity())
@@ -275,22 +303,31 @@ public class GmapFragment extends Fragment implements
         for (Marker marker: visibleMarkers) {
             marker.setVisible(false);
         }
-
         // clear efficiently visibleMarkers array after location change
         visibleMarkers.clear();
+        markersInRadius.clear();
 
         // set new markers visibility to true
         for (Marker marker: markers) {
-            float[] distance = new float[2];
+            float[] distance = new float[2],
+                    grabbingDistance = new float[2];
 
             Location.distanceBetween(location.getLatitude(), location.getLongitude(),
                     marker.getPosition().latitude, marker.getPosition().longitude, distance);
 
-            if (distance[0] < lineOfSight.getRadius()) {
+            Location.distanceBetween(location.getLatitude(), location.getLongitude(),
+                    marker.getPosition().latitude, marker.getPosition().longitude, grabbingDistance);
+
+            if (distance[0] < lineOfSightDistance && !grabbedMarkers.containsKey(marker)) {
                 marker.setVisible(true);
                 visibleMarkers.add(marker);
             }
+
+            if (grabbingDistance[0] < grabbingRadiusDistance && !grabbedMarkers.containsKey(marker)) {
+                markersInRadius.add(marker);
+            }
         }
+
     }
 
 }
