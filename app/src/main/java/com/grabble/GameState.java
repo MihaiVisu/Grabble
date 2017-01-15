@@ -18,7 +18,7 @@ import java.util.HashMap;
  */
 public class GameState extends Application {
 
-    private static Context context;
+    private Context context;
     private int totalScore;
     private int gems;
     private int cash;
