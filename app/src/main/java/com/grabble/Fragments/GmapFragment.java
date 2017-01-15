@@ -89,17 +89,19 @@ public class GmapFragment extends Fragment implements
                 if (markersInRadius.isEmpty()) {
                     message = "No Letter Grabbed!";
                 }
-                else message = "New Letters Grabbed!";
-                Snackbar.make(view, message, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                else {
+                    message = "New Letters Grabbed!";
+                    Snackbar.make(view, message, Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
 
-                for (Marker marker : markersInRadius) {
-                    marker.setVisible(false);
-                    // mark marker as grabbed
-                    grabbedMarkers.put(marker, true);
+                    for (Marker marker : markersInRadius) {
+                        marker.setVisible(false);
+                        // mark marker as grabbed
+                        grabbedMarkers.put(marker, true);
+                    }
+
+                    markersInRadius.clear();
                 }
-
-                markersInRadius.clear();
             }
         });
 
