@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
 
 import com.amulyakhare.textdrawable.util.ColorGenerator;
-import com.grabble.CustomClasses.CustomListAdapter;
+import com.grabble.customclasses.CustomListAdapter;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 

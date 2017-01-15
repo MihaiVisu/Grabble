@@ -1,7 +1,8 @@
-package com.grabble.CustomClasses;
+package com.grabble;
 
 
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
 
 import java.io.File;
@@ -17,6 +18,7 @@ import java.util.HashMap;
  */
 public class GameState extends Application {
 
+    private static Context context;
     private int totalScore;
     private int gems;
     private int cash;
@@ -32,9 +34,12 @@ public class GameState extends Application {
     // constructor
 
     @SuppressWarnings("unchecked")
-    public GameState() {
-        SharedPreferences prefs = getApplicationContext()
-                .getSharedPreferences("gamestate", MODE_PRIVATE);
+    public void onCreate() {
+        super.onCreate();
+
+        context = getApplicationContext();
+
+        SharedPreferences prefs = context.getSharedPreferences("gamestate", MODE_PRIVATE);
 
         username = prefs.getString("username", "Player");
         totalScore = prefs.getInt("totalScore", 0);
@@ -42,7 +47,7 @@ public class GameState extends Application {
         cash = prefs.getInt("cash", 0);
 
         try {
-            File internalFile = new File(getApplicationContext().getFilesDir(), "internalFile.txt");
+            File internalFile = new File(context.getFilesDir(), "internalFile.txt");
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream(internalFile));
 
             lettersGrabbed = (HashMap<String, Integer>) ois.readObject();
@@ -110,11 +115,11 @@ public class GameState extends Application {
     // custom query and update methods
 
     public int getLetterScore(String letter) {
-        return scores[letter.charAt(0)-'A'];
+        return scores[(int)letter.charAt(0)-'A'];
     }
 
     public int getLetterScore(char letter) {
-        return scores[letter-'A'];
+        return scores[(int)letter-'A'];
     }
 
     public void addNewLetter(String letter) {
@@ -127,9 +132,20 @@ public class GameState extends Application {
         }
     }
 
+    public void addNewWord(String word) {
+        int score = 0;
+        for (char c : word.toCharArray()) {
+            score += scores[(int)c-'A'];
+        }
+        wordsCreated.put(word, score);
+    }
+
     public void updateState() {
+
+        //TODO: add the sharedPreferences stuff
+
         try {
-            File internalFile = new File(getApplicationContext().getFilesDir(), "internalFile.txt");
+            File internalFile = new File(context.getFilesDir(), "internalFile.txt");
             FileOutputStream fout = new FileOutputStream(internalFile);
             ObjectOutputStream oout = new ObjectOutputStream(fout);
 

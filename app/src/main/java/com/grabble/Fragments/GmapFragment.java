@@ -35,7 +35,8 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.grabble.CustomClasses.KMLParser;
+import com.grabble.GameState;
+import com.grabble.customclasses.KMLParser;
 import com.grabble.R;
 
 import org.xmlpull.v1.XmlPullParserException;
@@ -64,6 +65,8 @@ public class GmapFragment extends Fragment implements
     private int lineOfSightDistance = 50,
                 grabbingRadiusDistance = 10;
 
+    private GameState state;
+
     private ArrayList<Location> locations = new ArrayList<>();
     private ArrayList<Marker> markers = new ArrayList<>();
     private ArrayList<Marker> visibleMarkers = new ArrayList<>();
@@ -79,6 +82,8 @@ public class GmapFragment extends Fragment implements
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        state = ((GameState) getActivity().getApplicationContext());
 
         FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -153,6 +158,8 @@ public class GmapFragment extends Fragment implements
     @TargetApi(Build.VERSION_CODES.M)
     @Override
     public void onMapReady(GoogleMap googleMap) {
+
+        System.out.println(state.getUsername());
 
         mMap = googleMap;
 

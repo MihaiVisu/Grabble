@@ -1,4 +1,4 @@
-package com.grabble.CustomClasses;
+package com.grabble.customclasses;
 
 
 import android.util.Xml;

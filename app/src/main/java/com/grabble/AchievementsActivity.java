@@ -6,7 +6,7 @@ import android.widget.ListView;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
-import com.grabble.CustomClasses.CustomListAdapter;
+import com.grabble.customclasses.CustomListAdapter;
 
 
 public class AchievementsActivity extends AppCompatActivity {
