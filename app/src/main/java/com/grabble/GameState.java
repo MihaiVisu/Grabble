@@ -31,7 +31,6 @@ public class GameState extends Application {
 
     private HashMap<String, Integer> lettersGrabbed,
             wordsCreated;
-
     private HashSet<String> markersGrabbed;
 
     // constructor
@@ -53,14 +52,28 @@ public class GameState extends Application {
             File internalFile = new File(context.getFilesDir(), "internalFile.txt");
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream(internalFile));
 
-            markersGrabbed = (HashSet<String>) ois.readObject();
             lettersGrabbed = (HashMap<String, Integer>) ois.readObject();
+
             wordsCreated = (HashMap<String, Integer>) ois.readObject();
+
+            markersGrabbed = (HashSet<String>) ois.readObject();
+
 
             ois.close();
         }
         catch (Exception e) {
             e.printStackTrace();
+        }
+        finally {
+            if (lettersGrabbed == null) {
+                lettersGrabbed = new HashMap<>();
+            }
+            if (wordsCreated == null) {
+                wordsCreated = new HashMap<>();
+            }
+            if (markersGrabbed == null) {
+                markersGrabbed = new HashSet<>();
+            }
         }
     }
 
@@ -142,6 +155,8 @@ public class GameState extends Application {
         else {
             lettersGrabbed.put(letter, freqOfLetter+1);
         }
+        System.out.println(lettersGrabbed.size() + " " + letter);
+        System.out.println(lettersGrabbed.keySet().toString());
     }
 
     public void addNewMarker(String markerId) {
@@ -165,9 +180,9 @@ public class GameState extends Application {
             FileOutputStream fout = new FileOutputStream(internalFile);
             ObjectOutputStream oout = new ObjectOutputStream(fout);
 
-            oout.writeObject(markersGrabbed);
             oout.writeObject(lettersGrabbed);
             oout.writeObject(wordsCreated);
+            oout.writeObject(markersGrabbed);
 
             oout.close();
         }

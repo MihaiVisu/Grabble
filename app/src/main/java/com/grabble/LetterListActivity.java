@@ -9,30 +9,42 @@ import com.grabble.customclasses.CustomListAdapter;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+
 public class LetterListActivity extends AppCompatActivity {
+
+    private GameState state;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_letter_list);
 
+        state = (GameState)getApplicationContext();
+
         ListView lst = (ListView)findViewById(R.id.letter_list);
 
-        String[] letters = {"A", "B", "C", "E", "F", "H", "R", "T", "U", "V", "W"};
-        String[] scores = {
-                "Score: 3",
-                "Score: 20",
-                "Score: 13",
-                "Score: 1",
-                "Score: 15",
-                "Score: 9",
-                "Score: 8",
-                "Score: 2",
-                "Score: 12",
-                "Score: 21",
-                "Score: 17"
-        };
-        int[] left = {4,1,3,5,1,2,3,2,1,1,1};
+        int counter = 0;
+
+        HashMap<String, Integer> lettersGrabbed = state.getLettersGrabbed();
+
+        String[] letters = new String[lettersGrabbed.size()];
+        String[] scores = new String[lettersGrabbed.size()];
+        int[] left = new int[lettersGrabbed.size()];
+
+        for (String letter : lettersGrabbed.keySet()) {
+            letters[counter] = letter;
+            scores[counter] = "Score: " + state.getLetterScore(letter);
+            left[counter++] = lettersGrabbed.get(letter);
+        }
+
+        System.out.println(Arrays.toString(letters));
+        System.out.println(Arrays.toString(scores));
+        System.out.println(Arrays.toString(left));
+
         String[] leftTags = new String[left.length];
         for (int i = 0; i < left.length; i++) {
             leftTags[i] = "x" + left[i] + " left";
