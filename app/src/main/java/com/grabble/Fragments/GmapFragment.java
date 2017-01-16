@@ -48,8 +48,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 
 public class GmapFragment extends Fragment implements
@@ -71,7 +73,6 @@ public class GmapFragment extends Fragment implements
     private ArrayList<Marker> markers = new ArrayList<>();
     private ArrayList<Marker> visibleMarkers = new ArrayList<>();
     private ArrayList<Marker> markersInRadius = new ArrayList<>();
-    private Map<Marker, Boolean> grabbedMarkers = new HashMap<>();
 
     @Nullable
     @Override
@@ -101,7 +102,8 @@ public class GmapFragment extends Fragment implements
                     for (Marker marker : markersInRadius) {
                         marker.setVisible(false);
                         // mark marker as grabbed
-                        grabbedMarkers.put(marker, true);
+                        state.addNewMarker(marker.getId());
+                        state.addNewLetter(marker.getTitle());
                     }
 
                     markersInRadius.clear();
@@ -142,6 +144,7 @@ public class GmapFragment extends Fragment implements
     @Override
     public void onStop() {
         mGoogleApiClient.disconnect();
+        state.activityStopped();
         super.onStop();
     }
 
@@ -158,8 +161,6 @@ public class GmapFragment extends Fragment implements
     @TargetApi(Build.VERSION_CODES.M)
     @Override
     public void onMapReady(GoogleMap googleMap) {
-
-        System.out.println(state.getUsername());
 
         mMap = googleMap;
 
@@ -329,12 +330,12 @@ public class GmapFragment extends Fragment implements
             Location.distanceBetween(location.getLatitude(), location.getLongitude(),
                     marker.getPosition().latitude, marker.getPosition().longitude, grabbingDistance);
 
-            if (distance[0] < lineOfSightDistance && !grabbedMarkers.containsKey(marker)) {
+            if (distance[0] < lineOfSightDistance && !state.getMarkersGrabbed().contains(marker.getId())) {
                 marker.setVisible(true);
                 visibleMarkers.add(marker);
             }
 
-            if (grabbingDistance[0] < grabbingRadiusDistance && !grabbedMarkers.containsKey(marker)) {
+            if (grabbingDistance[0] < grabbingRadiusDistance && !state.getMarkersGrabbed().contains(marker.getId())) {
                 markersInRadius.add(marker);
             }
         }

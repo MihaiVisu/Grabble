@@ -11,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * Class which keeps track of the current state of the user variables
@@ -31,6 +32,8 @@ public class GameState extends Application {
     private HashMap<String, Integer> lettersGrabbed,
             wordsCreated;
 
+    private HashSet<String> markersGrabbed;
+
     // constructor
 
     @SuppressWarnings("unchecked")
@@ -50,6 +53,7 @@ public class GameState extends Application {
             File internalFile = new File(context.getFilesDir(), "internalFile.txt");
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream(internalFile));
 
+            markersGrabbed = (HashSet<String>) ois.readObject();
             lettersGrabbed = (HashMap<String, Integer>) ois.readObject();
             wordsCreated = (HashMap<String, Integer>) ois.readObject();
 
@@ -86,6 +90,10 @@ public class GameState extends Application {
         return wordsCreated;
     }
 
+    public HashSet<String> getMarkersGrabbed() {
+        return markersGrabbed;
+    }
+
     // setters for the global variables
 
     public void setUsername(String username) {
@@ -112,6 +120,10 @@ public class GameState extends Application {
         this.wordsCreated = wordsCreated;
     }
 
+    public void setMarkersGrabbed(HashSet<String> markersGrabbed) {
+        this.markersGrabbed = markersGrabbed;
+    }
+
     // custom query and update methods
 
     public int getLetterScore(String letter) {
@@ -132,6 +144,10 @@ public class GameState extends Application {
         }
     }
 
+    public void addNewMarker(String markerId) {
+        markersGrabbed.add(markerId);
+    }
+
     public void addNewWord(String word) {
         int score = 0;
         for (char c : word.toCharArray()) {
@@ -149,6 +165,7 @@ public class GameState extends Application {
             FileOutputStream fout = new FileOutputStream(internalFile);
             ObjectOutputStream oout = new ObjectOutputStream(fout);
 
+            oout.writeObject(markersGrabbed);
             oout.writeObject(lettersGrabbed);
             oout.writeObject(wordsCreated);
 
@@ -157,6 +174,11 @@ public class GameState extends Application {
         catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    // method used to be called when onStop is triggered in any activity
+    public void activityStopped() {
+        updateState();
     }
 
 }
