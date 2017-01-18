@@ -8,9 +8,8 @@ import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.grabble.customclasses.CustomListAdapter;
 
 import com.amulyakhare.textdrawable.TextDrawable;
+import com.grabble.customclasses.GameState;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 

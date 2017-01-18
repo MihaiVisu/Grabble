@@ -35,7 +35,7 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.grabble.GameState;
+import com.grabble.customclasses.GameState;
 import com.grabble.customclasses.KMLParser;
 import com.grabble.R;
 
@@ -47,11 +47,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 
 public class GmapFragment extends Fragment implements
