@@ -40,10 +40,6 @@ public class LetterListActivity extends AppCompatActivity {
             left[counter++] = lettersGrabbed.get(letter);
         }
 
-        System.out.println(Arrays.toString(letters));
-        System.out.println(Arrays.toString(scores));
-        System.out.println(Arrays.toString(left));
-
         String[] leftTags = new String[left.length];
         for (int i = 0; i < left.length; i++) {
             leftTags[i] = "x" + left[i] + " left";

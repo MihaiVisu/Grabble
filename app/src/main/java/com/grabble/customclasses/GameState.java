@@ -5,13 +5,18 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.HashSet;
+
+import static com.paypal.android.sdk.onetouch.core.metadata.ah.R;
 
 /**
  * Class which keeps track of the current state of the user variables
@@ -31,7 +36,7 @@ public class GameState extends Application {
 
     private HashMap<String, Integer> lettersGrabbed,
             wordsCreated;
-    private HashSet<String> markersGrabbed;
+    private HashSet<String> markersGrabbed, wordsList;
 
     // constructor
 
@@ -58,6 +63,8 @@ public class GameState extends Application {
 
             markersGrabbed = (HashSet<String>) ois.readObject();
 
+            wordsList = (HashSet<String>) ois.readObject();
+
 
             ois.close();
         }
@@ -74,7 +81,29 @@ public class GameState extends Application {
             if (markersGrabbed == null) {
                 markersGrabbed = new HashSet<>();
             }
+            if (wordsList == null) {
+                wordsList = new HashSet<>();
+            }
         }
+
+        // if the list of words hasn't been initialized previously in internal storage
+        // initialize it from the grabble.txt raw file and add it to the set
+        if (wordsList.isEmpty()) {
+            try {
+                InputStream iograbble = getApplicationContext().getResources().openRawResource(
+                        getResources().getIdentifier("grabble", "raw", getPackageName()));
+                BufferedReader buffer = new BufferedReader(new InputStreamReader(iograbble));
+                String line;
+                while ((line = buffer.readLine()) != null) {
+                    wordsList.add(line);
+                }
+                // close the buffer
+                buffer.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
     // getters for the global variables
@@ -107,6 +136,10 @@ public class GameState extends Application {
         return markersGrabbed;
     }
 
+    public HashSet<String> getWordsList() {
+        return wordsList;
+    }
+
     // setters for the global variables
 
     public void setUsername(String username) {
@@ -137,14 +170,14 @@ public class GameState extends Application {
         this.markersGrabbed = markersGrabbed;
     }
 
+    public void setWordsList(HashSet<String> wordsList) {
+        this.wordsList = wordsList;
+    }
+
     // custom query and update methods
 
     public int getLetterScore(String letter) {
         return scores[(int)letter.charAt(0)-'A'];
-    }
-
-    public int getLetterScore(char letter) {
-        return scores[(int)letter-'A'];
     }
 
     public void addNewLetter(String letter) {
@@ -155,8 +188,6 @@ public class GameState extends Application {
         else {
             lettersGrabbed.put(letter, freqOfLetter+1);
         }
-        System.out.println(lettersGrabbed.size() + " " + letter);
-        System.out.println(lettersGrabbed.keySet().toString());
     }
 
     public void addNewMarker(String markerId) {
@@ -183,6 +214,7 @@ public class GameState extends Application {
             oout.writeObject(lettersGrabbed);
             oout.writeObject(wordsCreated);
             oout.writeObject(markersGrabbed);
+            oout.writeObject(wordsList);
 
             oout.close();
         }
