@@ -190,6 +190,22 @@ public class GameState extends Application {
         }
     }
 
+    public void removeLetter(String letter) {
+        if (lettersGrabbed.containsKey(letter)) {
+            Integer freq = lettersGrabbed.get(letter);
+            if (freq == 1) {
+                lettersGrabbed.remove(letter);
+            }
+            else {
+                lettersGrabbed.put(letter, freq-1);
+            }
+        }
+    }
+
+    public void removeLetter(char letter) {
+        removeLetter(String.valueOf(letter));
+    }
+
     public void addNewMarker(String markerId) {
         markersGrabbed.add(markerId);
     }

@@ -137,6 +137,9 @@ public class WordsActivity extends AppCompatActivity  implements View.OnClickLis
 
                 if(state.getWordsList().contains(typedWord)) {
                     state.addNewWord(typedWord);
+                    for(int idx = 0; idx < typedWord.length(); idx++) {
+                        state.removeLetter(typedWord.charAt(idx));
+                    }
                 }
                 else {
                     Toast.makeText(getApplicationContext(), "Invalid word!",
