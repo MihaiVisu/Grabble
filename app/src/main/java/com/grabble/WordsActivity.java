@@ -32,6 +32,8 @@ public class WordsActivity extends AppCompatActivity  implements View.OnClickLis
 
     GameState state;
 
+    Toast toast;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,16 +43,24 @@ public class WordsActivity extends AppCompatActivity  implements View.OnClickLis
 
         tl = (TableLayout) findViewById(R.id.words_table);
 
+        toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
+
         InputFilter filter = new InputFilter() {
             @Override
             public CharSequence filter(CharSequence source, int start, int end,
                                        Spanned dest, int dstart, int dend) {
+
                 String typedChar = source.toString();
 
-                if(!state.getLettersGrabbed().containsKey(typedChar)) {
-                    Toast.makeText(getApplicationContext(), "Letter "+
-                            typedChar.charAt(end-1)+" is not collected!",
-                            Toast.LENGTH_SHORT).show();
+                if (!Character.isLetter(typedChar.charAt(0)) && typedChar.length() != 0) {
+                    toast.setText("You must type a letter!");
+                    toast.show();
+                    return "";
+                }
+
+                if(!state.getLettersGrabbed().containsKey(typedChar) && typedChar.length() != 0) {
+                    toast.setText("Letter " + typedChar.charAt(0) + " is not collected!");
+                    toast.show();
                     return "";
                 }
 
@@ -72,7 +82,7 @@ public class WordsActivity extends AppCompatActivity  implements View.OnClickLis
 
         for (int i = 0; i < letterBoxesLayout.getChildCount(); i++) {
             letterBoxes[i] = (EditText) letterBoxesLayout.getChildAt(i);
-            letterBoxes[i].setFilters(new InputFilter[] {filter});
+            letterBoxes[i].setFilters(new InputFilter[] {filter, new InputFilter.LengthFilter(1)});
             letterBoxes[i].addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -81,6 +91,12 @@ public class WordsActivity extends AppCompatActivity  implements View.OnClickLis
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    // if field is empty, do nothing
+                    if (s.length() == 0) {
+                        createWordButton.setEnabled(false);
+                        return;
+                    }
+
                     // if it is not letter, then quit
                     if (!Character.isLetter(s.charAt(0))) {
                         return;
@@ -151,13 +167,13 @@ public class WordsActivity extends AppCompatActivity  implements View.OnClickLis
                         addNewWordToList(typedWord);
                     }
                     else {
-                        Toast.makeText(getApplicationContext(), "Word already collected!",
-                                Toast.LENGTH_SHORT).show();
+                        toast.setText("Word already collected!");
+                        toast.show();
                     }
                 }
                 else {
-                    Toast.makeText(getApplicationContext(), "Invalid word!",
-                            Toast.LENGTH_SHORT).show();
+                    toast.setText("Invalid word!");
+                    toast.show();
                 }
                 break;
             default:
