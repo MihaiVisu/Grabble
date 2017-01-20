@@ -102,35 +102,12 @@
         android:paddingTop="16dp"/>
 
     <TableLayout
+        android:id="@+id/words_table"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:stretchColumns="1"
         android:paddingLeft="10dp"
         android:paddingRight="10dp">
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" >
-            <TextView
-                android:layout_column="1"
-                android:text="car"
-                android:padding="3dp" />
-            <TextView
-                android:text="Score: 24"
-                android:paddingLeft="3dp" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <TextView
-                android:layout_column="1"
-                android:text="plane"
-                android:padding="3dp" />
-            <TextView
-                android:text="Score: 40"
-                android:paddingLeft="3dp" />
-        </TableRow>
     </TableLayout>
 
 </LinearLayout>

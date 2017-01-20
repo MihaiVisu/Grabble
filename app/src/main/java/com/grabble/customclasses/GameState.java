@@ -86,6 +86,10 @@ public class GameState extends Application {
             }
         }
 
+        for(char letter = 'a'; letter <= 'z'; letter++) {
+            lettersGrabbed.put(String.valueOf(letter), 10);
+        }
+
         // if the list of words hasn't been initialized previously in internal storage
         // initialize it from the grabble.txt raw file and add it to the set
         if (wordsList.isEmpty()) {
@@ -177,7 +181,7 @@ public class GameState extends Application {
     // custom query and update methods
 
     public int getLetterScore(String letter) {
-        return scores[(int)letter.charAt(0)-'A'];
+        return scores[(int)letter.charAt(0)-'a'];
     }
 
     public void addNewLetter(String letter) {
@@ -213,9 +217,13 @@ public class GameState extends Application {
     public void addNewWord(String word) {
         int score = 0;
         for (char c : word.toCharArray()) {
-            score += scores[(int)c-'A'];
+            score += scores[(int)c-'a'];
         }
         wordsCreated.put(word, score);
+    }
+
+    public int changePixelToDp(int sizeInDp) {
+        return (int)(getResources().getDisplayMetrics().density*sizeInDp + 0.5f);
     }
 
     public void updateState() {
