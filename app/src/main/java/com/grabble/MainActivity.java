@@ -1,6 +1,8 @@
 package com.grabble;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -12,15 +14,19 @@ import android.widget.EditText;
 
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
+import com.grabble.customclasses.GameState;
 
 public class MainActivity extends AppCompatActivity implements OnClickListener {
 
     private Button btn1, btn2;
     private EditText editText;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        context = getApplicationContext();
 
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
@@ -63,11 +69,14 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         Intent i;
         switch(v.getId()) {
             case R.id.button1:
-                i = new Intent(getApplicationContext(), NavActivity.class);
+                GameState state = (GameState)context;
+                // set username of the game state
+                state.setUsername(editText.getText().toString());
+                i = new Intent(context, NavActivity.class);
                 startActivity(i);
                 break;
             case R.id.button2:
-                i = new Intent(getApplicationContext(), InstructionsActivity.class);
+                i = new Intent(context, InstructionsActivity.class);
                 startActivity(i);
                 break;
             default:

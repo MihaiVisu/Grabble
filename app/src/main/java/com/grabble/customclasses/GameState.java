@@ -37,6 +37,7 @@ public class GameState extends Application {
     private HashMap<String, Integer> lettersGrabbed,
             wordsCreated;
     private HashSet<String> markersGrabbed, wordsList;
+    private SharedPreferences prefs;
 
     // constructor
 
@@ -46,7 +47,7 @@ public class GameState extends Application {
 
         context = getApplicationContext();
 
-        SharedPreferences prefs = context.getSharedPreferences("gamestate", MODE_PRIVATE);
+        prefs = context.getSharedPreferences("gamestate", MODE_PRIVATE);
 
         username = prefs.getString("username", "Player");
         totalScore = prefs.getInt("totalScore", 0);
@@ -228,7 +229,14 @@ public class GameState extends Application {
 
     public void updateState() {
 
-        //TODO: add the sharedPreferences stuff
+        // shared preferences stuff
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("username", username);
+        editor.putInt("totalScore", totalScore);
+        editor.putInt("gems", gems);
+        editor.putInt("cash", cash);
+
+        editor.apply();
 
         try {
             File internalFile = new File(context.getFilesDir(), "internalFile.txt");
