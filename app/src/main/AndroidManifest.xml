@@ -100,7 +100,8 @@
         <activity
             android:name=".ShopActivity"
             android:label="@string/title_activity_shop"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".NavActivity"/>
     </application>
 
 </manifest>

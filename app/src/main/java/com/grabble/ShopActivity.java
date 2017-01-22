@@ -1,23 +1,27 @@
 package com.grabble;
 
 import android.support.design.widget.TabLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.TextView;
+import android.os.Bundle;
+
+import com.grabble.customclasses.BundleOffer;
+import com.grabble.customclasses.BundlePackAdapter;
+
+import java.util.ArrayList;
 
 public class ShopActivity extends AppCompatActivity {
 
@@ -41,6 +45,7 @@ public class ShopActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shop);
 
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
@@ -53,15 +58,6 @@ public class ShopActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
     }
 
@@ -91,22 +87,48 @@ public class ShopActivity extends AppCompatActivity {
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment {
+    public static class BaseShopFragment extends Fragment {
         /**
          * The fragment argument representing the section number for this
          * fragment.
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
 
-        public PlaceholderFragment() {
+        private RecyclerView rv;
+        private static ArrayList<BundleOffer> bundleOffers;
+
+        public static void initializeBundleOffers(int sectionNum) {
+            bundleOffers = new ArrayList<>();
+            switch (sectionNum) {
+                case 0:
+                    bundleOffers.add(new BundleOffer(1, R.drawable.los, 200, 5, 0));
+                    bundleOffers.add(new BundleOffer(2, R.drawable.los, 390, 9, 0));
+                    bundleOffers.add(new BundleOffer(4, R.drawable.los, 770, 17, 0));
+                    bundleOffers.add(new BundleOffer(8, R.drawable.los, 1530, 33, 0));
+                    break;
+                case 1:
+                    bundleOffers.add(new BundleOffer(1, R.drawable.helper, 0, 8, 0));
+                    bundleOffers.add(new BundleOffer(2, R.drawable.helper, 0, 15, 0));
+                    bundleOffers.add(new BundleOffer(4, R.drawable.helper, 0, 29, 0));
+                    bundleOffers.add(new BundleOffer(8, R.drawable.helper, 0, 57, 0));
+                    break;
+                case 2:
+                    bundleOffers.add(new BundleOffer(5, R.drawable.gem, 0, 0, 0.99));
+                    bundleOffers.add(new BundleOffer(10, R.drawable.gem, 0, 0, 1.89));
+                    bundleOffers.add(new BundleOffer(20, R.drawable.gem, 0, 0, 2.99));
+                    bundleOffers.add(new BundleOffer(40, R.drawable.gem, 0, 0, 4.99));
+                    break;
+                default:
+                    break;
+            }
         }
 
         /**
          * Returns a new instance of this fragment for the given section
          * number.
          */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
+        public static BaseShopFragment newInstance(int sectionNumber) {
+            BaseShopFragment fragment = new BaseShopFragment();
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
             fragment.setArguments(args);
@@ -117,8 +139,18 @@ public class ShopActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_shop, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+
+            rv = (RecyclerView) rootView.findViewById(R.id.rv);
+
+            rv.setHasFixedSize(true); // fixed size to improve performance
+
+            LinearLayoutManager llm = new LinearLayoutManager(getActivity()
+                    .getApplicationContext());
+            rv.setLayoutManager(llm);
+
+            initializeBundleOffers(getArguments().getInt(ARG_SECTION_NUMBER)-1);
+
+            rv.setAdapter(new BundlePackAdapter(bundleOffers));
             return rootView;
         }
     }
@@ -135,9 +167,7 @@ public class ShopActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+            return BaseShopFragment.newInstance(position + 1);
         }
 
         @Override
@@ -150,11 +180,11 @@ public class ShopActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "SECTION 1";
+                    return "LOS Boosters";
                 case 1:
-                    return "SECTION 2";
+                    return "Word Helpers";
                 case 2:
-                    return "SECTION 3";
+                    return "Gems";
             }
             return null;
         }

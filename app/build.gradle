@@ -40,5 +40,7 @@ dependencies {
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
     compile 'com.braintreepayments.api:braintree:2.3.11'
     compile 'com.braintreepayments.api:drop-in:2.3.8'
+    compile 'com.android.support:cardview-v7'
+    compile 'com.android.support:recyclerview-v7'
     testCompile 'junit:junit:4.12'
 }

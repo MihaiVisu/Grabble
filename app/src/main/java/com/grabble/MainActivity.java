@@ -47,6 +47,8 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         editText = (EditText) findViewById(R.id.editText);
         if (state.getUsername() != null) {
             editText.setText(state.getUsername());
+            // enable the button by default if we have a username already
+            btn1.setEnabled(true);
         }
         editText.addTextChangedListener(new TextWatcher() {
             @Override
