@@ -16,7 +16,6 @@ import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import static com.paypal.android.sdk.onetouch.core.metadata.ah.R;
 
 /**
  * Class which keeps track of the current state of the user variables
@@ -28,6 +27,9 @@ public class GameState extends Application {
     private int totalScore;
     private int gems;
     private int cash;
+    private int losBoosters;
+    private int wordHelpers;
+    private int distanceTraveled;
     private String username;
     private static final int[] scores = {
             3, 20, 13, 10, 1, 15, 18, 9, 5, 25, 22, 11, 14,
@@ -40,7 +42,6 @@ public class GameState extends Application {
     private SharedPreferences prefs;
 
     // constructor
-
     @SuppressWarnings("unchecked")
     public void onCreate() {
         super.onCreate();
@@ -53,6 +54,9 @@ public class GameState extends Application {
         totalScore = prefs.getInt("totalScore", 0);
         gems = prefs.getInt("gems", 0);
         cash = prefs.getInt("cash", 0);
+        losBoosters = prefs.getInt("losBoosters", 0);
+        wordHelpers = prefs.getInt("wordHelpers", 0);
+        distanceTraveled = prefs.getInt("distanceTraveled", 0);
 
         try {
             File internalFile = new File(context.getFilesDir(), "internalFile.txt");
@@ -129,6 +133,18 @@ public class GameState extends Application {
         return cash;
     }
 
+    public int getLosBoosters() {
+        return losBoosters;
+    }
+
+    public int getWordHelpers() {
+        return wordHelpers;
+    }
+
+    public int getDistanceTraveled() {
+        return distanceTraveled;
+    }
+
     public HashMap<String, Integer> getLettersGrabbed() {
         return lettersGrabbed;
     }
@@ -163,8 +179,20 @@ public class GameState extends Application {
         this.cash = cash;
     }
 
+    public void setLosBoosters(int losBoosters) {
+        this.losBoosters = losBoosters;
+    }
+
+    public void setWordHelpers(int wordHelpers) {
+        this.wordHelpers = wordHelpers;
+    }
+
     public void setLettersGrabbed(HashMap<String, Integer> lettersGrabbed) {
         this.lettersGrabbed = lettersGrabbed;
+    }
+
+    public void setDistanceTraveled(int distanceTraveled) {
+        this.distanceTraveled = distanceTraveled;
     }
 
     public void setWordsCreated(HashMap<String, Integer> wordsCreated) {
@@ -227,16 +255,23 @@ public class GameState extends Application {
         return (int)(getResources().getDisplayMetrics().density*sizeInDp + 0.5f);
     }
 
-    public void updateState() {
-
-        // shared preferences stuff
+    // private method used to update the shared preferences
+    private void updateSharedPreferences() {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString("username", username);
         editor.putInt("totalScore", totalScore);
         editor.putInt("gems", gems);
         editor.putInt("cash", cash);
+        editor.putInt("losBoosters", losBoosters);
+        editor.putInt("wordHelpers", wordHelpers);
 
         editor.apply();
+    }
+
+    public void updateState() {
+
+        // shared preferences stuff
+        updateSharedPreferences();
 
         try {
             File internalFile = new File(context.getFilesDir(), "internalFile.txt");

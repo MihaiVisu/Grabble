@@ -22,6 +22,8 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     private EditText editText;
     private Context context;
 
+    GameState state;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +35,8 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
         setContentView(R.layout.activity_main);
 
+        state = (GameState)context;
+
         btn1 = (Button) findViewById(R.id.button1);
         btn1.setOnClickListener(this);
 
@@ -41,6 +45,9 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
         // add change listener to the editText view
         editText = (EditText) findViewById(R.id.editText);
+        if (state.getUsername() != null) {
+            editText.setText(state.getUsername());
+        }
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -69,7 +76,6 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         Intent i;
         switch(v.getId()) {
             case R.id.button1:
-                GameState state = (GameState)context;
                 // set username of the game state
                 state.setUsername(editText.getText().toString());
                 i = new Intent(context, NavActivity.class);
