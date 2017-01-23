@@ -35,9 +35,9 @@ public class LetterListActivity extends AppCompatActivity {
         int[] left = new int[lettersGrabbed.size()];
 
         for (String letter : lettersGrabbed.keySet()) {
-            letters[counter] = letter;
-            scores[counter] = "Score: " + state.getLetterScore(letter);
-            left[counter++] = lettersGrabbed.get(letter);
+            letters[counter] = letter.toLowerCase();
+            scores[counter] = "Score: " + state.getLetterScore(letter.toLowerCase());
+            left[counter++] = lettersGrabbed.get(letter.toLowerCase());
         }
 
         String[] leftTags = new String[left.length];

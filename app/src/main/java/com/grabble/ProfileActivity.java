@@ -51,7 +51,7 @@ public class ProfileActivity extends AppCompatActivity
         profileWordHelpers.setText(String.valueOf(state.getWordHelpers()));
 
         TextView profileDistance = (TextView) findViewById(R.id.profile_distance);
-        profileDistance.setText(String.valueOf(state.getDistanceTraveled()));
+        profileDistance.setText(String.valueOf(state.getDistanceTraveled() + " meters"));
 
         TextView profileScore = (TextView) findViewById(R.id.profile_score);
         profileScore.setText(String.valueOf(state.getTotalScore()));

@@ -195,6 +195,10 @@ public class GameState extends Application {
         this.distanceTraveled = distanceTraveled;
     }
 
+    public void addDistance(double distance) {
+        this.distanceTraveled += distance;
+    }
+
     public void setWordsCreated(HashMap<String, Integer> wordsCreated) {
         this.wordsCreated = wordsCreated;
     }

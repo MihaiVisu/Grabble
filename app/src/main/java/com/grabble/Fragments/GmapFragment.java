@@ -59,6 +59,7 @@ public class GmapFragment extends Fragment implements
 
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
+    private Location oldLocation;
     private LocationRequest mLocationRequest;
     private GoogleMap mMap;
     private Circle grabbingRadius, lineOfSight;
@@ -303,7 +304,15 @@ public class GmapFragment extends Fragment implements
 
     @Override
     public void onLocationChanged(Location location) {
-        System.out.println("Location Changed " + location.toString());
+        if (oldLocation != null) {
+            float[] dist = new float[2];
+            Location.distanceBetween(location.getLatitude(), location.getLongitude(),
+                    oldLocation.getLatitude(), oldLocation.getLongitude(), dist);
+            state.addDistance(dist[0]);
+        }
+        oldLocation = location;
+        System.out.println("Location Changed " + location.toString() + " distance:" +
+                state.getDistanceTraveled());
         if (grabbingRadius != null) {
             grabbingRadius.setCenter(new LatLng(location.getLatitude(), location.getLongitude()));
         }
