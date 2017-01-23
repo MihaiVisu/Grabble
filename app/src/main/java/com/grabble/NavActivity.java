@@ -16,6 +16,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.facebook.Profile;
+import com.facebook.login.widget.ProfilePictureView;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -51,6 +53,13 @@ public class NavActivity extends AppCompatActivity
         TextView profileUserName = (TextView) headerView.findViewById(R.id.header_user_name);
         profileUserName.setText("Hello, " + state.getUsername() + "!");
 
+        Profile profile = Profile.getCurrentProfile();
+
+        if (profile != null) {
+
+            ProfilePictureView profilePictureView = (ProfilePictureView) headerView.findViewById(R.id.imageView);
+            profilePictureView.setProfileId(profile.getId());
+        }
         FragmentManager fm = getFragmentManager();
         fm.beginTransaction().replace(R.id.content_frame, new GmapFragment()).commit();
 

@@ -7,20 +7,37 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.grabble.customclasses.GameState;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity implements OnClickListener {
 
     private Button btn1, btn2;
+    private LoginButton fbLogin;
     private EditText editText;
     private Context context;
+
+    private CallbackManager callbackManager;
 
     GameState state;
 
@@ -42,6 +59,48 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
         btn2 = (Button) findViewById(R.id.button2);
         btn2.setOnClickListener(this);
+
+        callbackManager = CallbackManager.Factory.create();
+        fbLogin = (LoginButton) findViewById(R.id.login_button);
+
+        fbLogin.setReadPermissions(Arrays.asList(
+                "public_profile", "email"));
+
+        fbLogin.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+
+                GraphRequest request = GraphRequest.newMeRequest(
+                        loginResult.getAccessToken(),
+                        new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(JSONObject object, GraphResponse response) {
+                                try {
+                                    state.setUsername(object.get("name").toString());
+                                }
+                                catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+
+                request.executeAsync();
+
+                Intent i = new Intent(context, NavActivity.class);
+                startActivity(i);
+
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                System.out.println("log in failed");
+            }
+        });
 
         // add change listener to the editText view
         editText = (EditText) findViewById(R.id.editText);
@@ -71,6 +130,12 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
