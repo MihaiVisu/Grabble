@@ -70,6 +70,13 @@ public class BundlePackAdapter extends RecyclerView.Adapter<BundlePackAdapter.Bu
                     "£" + cashPrice
             ));
         }
+
+        holder.cv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO: DO PAYMENTS STUFF
+            }
+        });
     }
 
     @Override

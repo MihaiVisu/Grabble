@@ -1,5 +1,6 @@
 package com.grabble;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,7 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.os.Bundle;
-
 import com.grabble.customclasses.BundleOffer;
 import com.grabble.customclasses.BundlePackAdapter;
 
@@ -44,7 +44,6 @@ public class ShopActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shop);
-
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -135,6 +134,7 @@ public class ShopActivity extends AppCompatActivity {
             return fragment;
         }
 
+
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
@@ -143,7 +143,6 @@ public class ShopActivity extends AppCompatActivity {
             rv = (RecyclerView) rootView.findViewById(R.id.rv);
 
             rv.setHasFixedSize(true); // fixed size to improve performance
-
             LinearLayoutManager llm = new LinearLayoutManager(getActivity()
                     .getApplicationContext());
             rv.setLayoutManager(llm);
@@ -151,6 +150,7 @@ public class ShopActivity extends AppCompatActivity {
             initializeBundleOffers(getArguments().getInt(ARG_SECTION_NUMBER)-1);
 
             rv.setAdapter(new BundlePackAdapter(bundleOffers));
+
             return rootView;
         }
     }
