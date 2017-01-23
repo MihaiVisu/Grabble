@@ -260,7 +260,7 @@ public class GmapFragment extends Fragment implements
         }
 
         mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(1000);
+        mLocationRequest.setInterval(10*1000);
         mLocationRequest.setFastestInterval(1000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
@@ -286,7 +286,7 @@ public class GmapFragment extends Fragment implements
                     .radius(grabbingRadiusDistance)
                     .strokeColor(Color.TRANSPARENT)
                     .fillColor(Color.parseColor("#703F51B5")));
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(
+            mMap.animateCamera(CameraUpdateFactory.newLatLng(
                     new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude())
             ));
         }
@@ -313,7 +313,7 @@ public class GmapFragment extends Fragment implements
             lineOfSight.setCenter(new LatLng(location.getLatitude(), location.getLongitude()));
         }
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(
+        mMap.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(
                 location.getLatitude(), location.getLongitude()
         )));
 
