@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.facebook.Profile;
+import com.facebook.login.widget.ProfilePictureView;
 import com.google.android.gms.games.Game;
 import com.grabble.customclasses.GameState;
 
@@ -25,6 +27,13 @@ public class ProfileActivity extends AppCompatActivity
 
         btn1 = (Button)findViewById(R.id.show_letters_gathered);
         btn1.setOnClickListener(this);
+
+        Profile profile = Profile.getCurrentProfile();
+
+        if (profile != null) {
+            ProfilePictureView profilePictureView = (ProfilePictureView) findViewById(R.id.profile_image);
+            profilePictureView.setProfileId(profile.getId());
+        }
 
         TextView profileUserName = (TextView) findViewById(R.id.profile_user_name);
         profileUserName.setText(state.getUsername());

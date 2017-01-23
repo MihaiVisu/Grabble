@@ -56,7 +56,6 @@ public class NavActivity extends AppCompatActivity
         Profile profile = Profile.getCurrentProfile();
 
         if (profile != null) {
-
             ProfilePictureView profilePictureView = (ProfilePictureView) headerView.findViewById(R.id.imageView);
             profilePictureView.setProfileId(profile.getId());
         }
