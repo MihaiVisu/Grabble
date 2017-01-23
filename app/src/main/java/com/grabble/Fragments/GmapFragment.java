@@ -5,6 +5,7 @@ import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Camera;
 import android.graphics.Color;
 import android.location.Location;
 import android.net.ConnectivityManager;
@@ -27,6 +28,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -56,12 +59,13 @@ public class GmapFragment extends Fragment implements
 
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
+    private LocationRequest mLocationRequest;
     private GoogleMap mMap;
     private Circle grabbingRadius, lineOfSight;
 
     // distances in meters
     private int lineOfSightDistance = 50,
-                grabbingRadiusDistance = 10;
+            grabbingRadiusDistance = 10;
 
     private GameState state;
 
@@ -89,8 +93,7 @@ public class GmapFragment extends Fragment implements
                 String message;
                 if (markersInRadius.isEmpty()) {
                     message = "No Letter Grabbed!";
-                }
-                else {
+                } else {
                     message = "New Letters Grabbed!";
                     Snackbar.make(view, message, Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
@@ -128,7 +131,7 @@ public class GmapFragment extends Fragment implements
         Calendar c = Calendar.getInstance();
 
         return "http://www.inf.ed.ac.uk/teaching/courses/selp/coursework/" +
-                days[c.get(Calendar.DAY_OF_WEEK)-1] + ".kml";
+                days[c.get(Calendar.DAY_OF_WEEK) - 1] + ".kml";
     }
 
     @Override
@@ -139,19 +142,11 @@ public class GmapFragment extends Fragment implements
 
     @Override
     public void onStop() {
-        mGoogleApiClient.disconnect();
+        if (mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
+        }
         state.activityStopped();
         super.onStop();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-
-        // stop location updates when activity is no longer in focus
-        if (mGoogleApiClient != null) {
-            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-        }
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -162,7 +157,11 @@ public class GmapFragment extends Fragment implements
 
         mMap.getUiSettings().setMapToolbarEnabled(false);
 
-        if (ActivityCompat.checkSelfPermission(this.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this.getActivity(),
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this.getActivity(),
+                        Manifest.permission.ACCESS_COARSE_LOCATION) !=
+                        PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 100);
         }
         mMap.setMyLocationEnabled(true);
@@ -252,11 +251,15 @@ public class GmapFragment extends Fragment implements
     @TargetApi(Build.VERSION_CODES.M)
     private void createLocationRequest() {
 
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this.getActivity(),
+                        Manifest.permission.ACCESS_COARSE_LOCATION) !=
+                        PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 100);
         }
 
-        LocationRequest mLocationRequest = new LocationRequest();
+        mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(1000);
         mLocationRequest.setFastestInterval(1000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -283,18 +286,21 @@ public class GmapFragment extends Fragment implements
                     .radius(grabbingRadiusDistance)
                     .strokeColor(Color.TRANSPARENT)
                     .fillColor(Color.parseColor("#703F51B5")));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(
+                    new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude())
+            ));
         }
         createLocationRequest();
     }
 
     @Override
     public void onConnectionSuspended(int i) {
-
+        mGoogleApiClient.connect();
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
+        System.out.println("Connection Failed!");
     }
 
     @Override
@@ -306,6 +312,10 @@ public class GmapFragment extends Fragment implements
         if (lineOfSight != null) {
             lineOfSight.setCenter(new LatLng(location.getLatitude(), location.getLongitude()));
         }
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(
+                location.getLatitude(), location.getLongitude()
+        )));
 
         // set all visibleMarkers to false
         for (Marker marker: visibleMarkers) {
