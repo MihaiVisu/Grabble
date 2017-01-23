@@ -18,6 +18,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.os.Bundle;
+import android.widget.Toast;
+
 import com.grabble.customclasses.BundleOffer;
 import com.grabble.customclasses.BundlePackAdapter;
 
@@ -149,7 +151,9 @@ public class ShopActivity extends AppCompatActivity {
 
             initializeBundleOffers(getArguments().getInt(ARG_SECTION_NUMBER)-1);
 
-            rv.setAdapter(new BundlePackAdapter(bundleOffers));
+            rv.setAdapter(new BundlePackAdapter(bundleOffers,
+                    Toast.makeText(getActivity().getApplicationContext(), "message",
+                            Toast.LENGTH_SHORT)));
 
             return rootView;
         }

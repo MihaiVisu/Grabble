@@ -219,8 +219,6 @@ public class GmapFragment extends Fragment implements
 
             List<KMLParser.Entry> entries = null;
 
-            StringBuilder htmlString = new StringBuilder();
-
             try {
                 stream = downloadUrl(urlString);
                 entries = kmlParser.parse(stream);

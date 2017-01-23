@@ -249,6 +249,26 @@ public class GameState extends Application {
             score += scores[(int)c-'a'];
         }
         wordsCreated.put(word, score);
+        totalScore += score;
+        cash += score;
+    }
+
+    // method which updates cash and amount of boosters
+    // assuming we have enough money
+    public void buyBoosters(int quantity, String type, String currency, int price) {
+        if (type.equals("los")) {
+            losBoosters += quantity;
+            if (currency.equals("cash")) {
+                cash -= price;
+            }
+            else if (currency.equals("gems")) {
+                gems -= price;
+            }
+        }
+        else if (type.equals("helper")) {
+            wordHelpers += quantity;
+            gems -= price;
+        }
     }
 
     public int changePixelToDp(int sizeInDp) {
