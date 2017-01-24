@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Pair;
 
+import com.google.android.gms.location.LocationRequest;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -35,6 +37,7 @@ public class GameState extends Application {
     private int losBoosters;
     private int wordHelpers;
     private int distanceTraveled;
+    private int locationAccuracyMode;
     private String username;
     private static final int[] scores = {
             3, 20, 13, 10, 1, 15, 18, 9, 5, 25, 22, 11, 14,
@@ -68,6 +71,7 @@ public class GameState extends Application {
         losBoosters = prefs.getInt("losBoosters", 0);
         wordHelpers = prefs.getInt("wordHelpers", 0);
         distanceTraveled = prefs.getInt("distanceTraveled", 0);
+        locationAccuracyMode = prefs.getInt("accuracyMode", LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         try {
             File internalFile = new File(context.getFilesDir(), "internalFile.txt");
@@ -146,6 +150,10 @@ public class GameState extends Application {
     }
 
     // getters for the global variables
+
+    public int getLocationAccuracyMode() {
+        return locationAccuracyMode;
+    }
 
     public String getUsername() {
         return username;
@@ -323,10 +331,13 @@ public class GameState extends Application {
         editor.putInt("cash", cash);
         editor.putInt("losBoosters", losBoosters);
         editor.putInt("wordHelpers", wordHelpers);
+        editor.putInt("distanceTraveled", distanceTraveled);
+        editor.putInt("accuracyMode", locationAccuracyMode);
 
         editor.apply();
     }
 
+    // method called to update the state and save it to internal storage
     public void updateState() {
 
         // shared preferences stuff

@@ -134,7 +134,6 @@ public class BundlePackAdapter extends RecyclerView.Adapter<BundlePackAdapter.Bu
                             }
                         })
                 .setIcon(R.drawable.grabble_logo_main).show();
-
     }
 
     // create a confirmation alert so that user has to confirm before

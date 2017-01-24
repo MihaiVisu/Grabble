@@ -261,7 +261,7 @@ public class GmapFragment extends Fragment implements
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(10*1000);
         mLocationRequest.setFastestInterval(1000);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setPriority(state.getLocationAccuracyMode());
 
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
     }
