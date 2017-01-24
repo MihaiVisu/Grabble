@@ -153,7 +153,7 @@ public class ShopActivity extends AppCompatActivity {
 
             rv.setAdapter(new BundlePackAdapter(bundleOffers,
                     Toast.makeText(getActivity().getApplicationContext(), "message",
-                            Toast.LENGTH_SHORT)));
+                            Toast.LENGTH_SHORT), getActivity()));
 
             return rootView;
         }
