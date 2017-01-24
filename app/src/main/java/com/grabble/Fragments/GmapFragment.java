@@ -41,6 +41,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.grabble.customclasses.GameState;
 import com.grabble.customclasses.KMLParser;
 import com.grabble.R;
+import com.grabble.customclasses.ProgressHelper;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -51,6 +52,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
+import mbanje.kurt.fabbutton.FabButton;
 
 
 public class GmapFragment extends Fragment implements
@@ -108,6 +111,20 @@ public class GmapFragment extends Fragment implements
 
                     markersInRadius.clear();
                 }
+            }
+        });
+
+        final FabButton fabButton = (FabButton) getActivity().findViewById(R.id.los_fab);
+        final ProgressHelper helper = new ProgressHelper(fabButton, this.getActivity());
+
+        if (state.getLosProgress() > 0) {
+            helper.startDeterminate();
+        }
+
+        fabButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                helper.startDeterminate();
             }
         });
 

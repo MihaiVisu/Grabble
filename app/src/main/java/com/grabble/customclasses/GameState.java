@@ -39,6 +39,11 @@ public class GameState extends Application {
     private int distanceTraveled;
     private int locationAccuracyMode;
     private String username;
+
+    // variables for progress bar
+    private int losProgress;
+    private boolean progressStarted;
+
     private static final int[] scores = {
             3, 20, 13, 10, 1, 15, 18, 9, 5, 25, 22, 11, 14,
             6, 4, 19, 24, 8, 7, 2, 12, 21, 17, 23, 16, 26
@@ -155,6 +160,18 @@ public class GameState extends Application {
         return locationAccuracyMode;
     }
 
+    public int getLosProgress() {
+        return losProgress;
+    }
+
+    public boolean getProgressStarted() {
+        return progressStarted;
+    }
+
+    public void setProgressStarted(boolean progressStarted) {
+        this.progressStarted = progressStarted;
+    }
+
     public String getUsername() {
         return username;
     }
@@ -229,6 +246,10 @@ public class GameState extends Application {
         this.lettersGrabbed = lettersGrabbed;
     }
 
+    public void setLosProgress(int losProgress) {
+        this.losProgress = losProgress;
+    }
+
     public void setDistanceTraveled(int distanceTraveled) {
         this.distanceTraveled = distanceTraveled;
     }
@@ -253,6 +274,10 @@ public class GameState extends Application {
 
     public int getLetterScore(String letter) {
         return scores[(int)letter.charAt(0)-'a'];
+    }
+
+    public void incrementLosProgress() {
+        losProgress++;
     }
 
     public void addNewLetter(String letter) {

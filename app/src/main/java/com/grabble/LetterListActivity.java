@@ -2,6 +2,7 @@ package com.grabble;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.widget.ListView;
 
 import com.amulyakhare.textdrawable.util.ColorGenerator;
@@ -54,5 +55,14 @@ public class LetterListActivity extends AppCompatActivity {
 
         lst.setAdapter(adapter);
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return false;
     }
 }

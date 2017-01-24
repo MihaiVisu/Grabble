@@ -33,15 +33,21 @@
         app:backgroundTint="?attr/colorPrimaryDark"
         app:layout_anchorGravity="bottom|right" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/los"
-        android:layout_margin="@dimen/fab_margin"
+    <mbanje.kurt.fabbutton.FabButton
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_margin="16dp"
         android:id="@+id/los_fab"
-        app:backgroundTint="@color/bt_red"
+        android:layout_gravity="bottom|end"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:src="@drawable/los"
+        android:visibility="visible"
+        android:indeterminate="false"
         android:clickable="true"
-        app:layout_anchorGravity="center_vertical|center_horizontal"
-        android:layout_gravity="bottom|end" />
+        android:max="200"
+        app:fbb_autoStart="true"
+        app:fbb_progressColor="@color/bt_red"
+        app:fbb_progressWidthRatio="0.1"
+        />
 
 </android.support.design.widget.CoordinatorLayout>
