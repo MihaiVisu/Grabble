@@ -4,6 +4,7 @@ package com.grabble.customclasses;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Pair;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -13,8 +14,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+
 
 
 /**
@@ -39,6 +44,12 @@ public class GameState extends Application {
     private HashMap<String, Integer> lettersGrabbed,
             wordsCreated;
     private HashSet<String> markersGrabbed, wordsList;
+
+    public ArrayList<Pair<String, Integer>> getSortedWordsList() {
+        return sortedWordsList;
+    }
+
+    private ArrayList<Pair<String, Integer>> sortedWordsList;
     private SharedPreferences prefs;
 
     // constructor
@@ -89,6 +100,25 @@ public class GameState extends Application {
             if (wordsList == null) {
                 wordsList = new HashSet<>();
             }
+        }
+
+        if (!wordsList.isEmpty() && sortedWordsList == null) {
+            sortedWordsList = new ArrayList<>();
+            for (String word : wordsList) {
+                sortedWordsList.add(new Pair<>(word, calculateWordScore(word)));
+            }
+            Collections.sort(sortedWordsList, new Comparator<Pair<String, Integer>>() {
+                @Override
+                public int compare(Pair<String, Integer> o1, Pair<String, Integer> o2) {
+                    if (o1.second > o2.second) {
+                        return -1;
+                    } else if (o1.second.equals(o2.second)) {
+                        return 0;
+                    } else {
+                        return 1;
+                    }
+                }
+            });
         }
 
         for(char letter = 'a'; letter <= 'z'; letter++) {
@@ -247,11 +277,16 @@ public class GameState extends Application {
         markersGrabbed.add(markerId);
     }
 
-    public void addNewWord(String word) {
+    public int calculateWordScore(String word) {
         int score = 0;
-        for (char c : word.toCharArray()) {
+        for (char c : word.toLowerCase().toCharArray()) {
             score += scores[(int)c-'a'];
         }
+        return score;
+    }
+
+    public void addNewWord(String word) {
+        int score = calculateWordScore(word);
         wordsCreated.put(word, score);
         totalScore += score;
         cash += score;

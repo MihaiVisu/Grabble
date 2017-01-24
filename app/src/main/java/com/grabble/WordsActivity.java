@@ -1,13 +1,16 @@
 package com.grabble;
 
 import android.content.Intent;
+import android.support.annotation.IntegerRes;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.text.TextWatcher;
+import android.util.Pair;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -155,29 +158,64 @@ public class WordsActivity extends AppCompatActivity  implements View.OnClickLis
                 startActivity(i);
                 break;
             case R.id.get_suggestion_button:
-                //TODO: suggestion word code
+                String wordSuggestion = getSuggestion();
+                if (wordSuggestion != null) {
+                    createSuggestionAllert(wordSuggestion);
+                }
                 break;
             // action when user presses the create word button
             case R.id.create_word_button:
-                String typedWord = getTypedWord();
-
-                // if word is in dictionary and not in list of words already collected
-                if(state.getWordsList().contains(typedWord)) {
-                    if (!state.getWordsCreated().containsKey(typedWord)) {
-                        addNewWordToList(typedWord);
-                    }
-                    else {
-                        toast.setText("Word already collected!");
-                        toast.show();
-                    }
-                }
-                else {
-                    toast.setText("Invalid word!");
-                    toast.show();
-                }
+                createWord();
                 break;
             default:
                 break;
+        }
+    }
+
+    // create the alert showing the suggestion
+    private void createSuggestionAllert(String suggestion) {
+        new AlertDialog.Builder(this)
+                .setTitle("The Best Match Is:")
+                .setMessage("### " + suggestion + " ###")
+                .setIcon(R.drawable.grabble_logo_main).show();
+    }
+
+    // method that triggers the action of giving a word suggestion
+    private String getSuggestion() {
+        HashMap<String, Integer> lettersGrabbed = state.getLettersGrabbed();
+        for (Pair<String, Integer> word : state.getSortedWordsList()) {
+            int[] freqs = new int[26];
+            boolean wordFound = true;
+            for (char c : word.first.toLowerCase().toCharArray()) {
+                int index = (int)c-'a';
+                freqs[index]++;
+                if (freqs[index] > lettersGrabbed.get(String.valueOf(c))) {
+                    wordFound = false;
+                }
+            }
+            if (wordFound && !state.getWordsCreated().containsKey(word.first)) {
+                return word.first;
+            }
+        }
+        return null;
+    }
+
+    // method that triggers the action when create a word button is pressed
+    private void createWord() {
+        String typedWord = getTypedWord();
+        // if word is in dictionary and not in list of words already collected
+        if(state.getWordsList().contains(typedWord)) {
+            if (!state.getWordsCreated().containsKey(typedWord)) {
+                addNewWordToList(typedWord);
+            }
+            else {
+                toast.setText("Word already collected!");
+                toast.show();
+            }
+        }
+        else {
+            toast.setText("Invalid word!");
+            toast.show();
         }
     }
 
