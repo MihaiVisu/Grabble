@@ -5,7 +5,6 @@ import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.graphics.Camera;
 import android.graphics.Color;
 import android.location.Location;
 import android.net.ConnectivityManager;
@@ -28,7 +27,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -61,22 +59,23 @@ public class GmapFragment extends Fragment implements
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     private GoogleApiClient mGoogleApiClient;
-    private Location mLastLocation;
-    private Location oldLocation;
+    private static Location mLastLocation;
+    private  static Location oldLocation;
     private LocationRequest mLocationRequest;
     private GoogleMap mMap;
-    private Circle grabbingRadius, lineOfSight;
+
+    // circles representing line of sight and grabbing radius
+    private static Circle lineOfSight, grabbingRadius;
 
     // distances in meters
-    private int lineOfSightDistance = 50,
-            grabbingRadiusDistance = 10;
+    private static int grabbingRadiusDistance = 10,
+            lineOfSightDistance = 50;
 
     private GameState state;
 
-    private ArrayList<Location> locations = new ArrayList<>();
-    private ArrayList<Marker> markers = new ArrayList<>();
-    private ArrayList<Marker> visibleMarkers = new ArrayList<>();
-    private ArrayList<Marker> markersInRadius = new ArrayList<>();
+    private static ArrayList<Marker> markers = new ArrayList<>();
+    private static ArrayList<Marker> visibleMarkers = new ArrayList<>();
+    private static ArrayList<Marker> markersInRadius = new ArrayList<>();
 
     @Nullable
     @Override
@@ -94,13 +93,12 @@ public class GmapFragment extends Fragment implements
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String message;
+                String message = "";
+                Snackbar snackbar = Snackbar.make(view, message, Snackbar.LENGTH_SHORT);
                 if (markersInRadius.isEmpty()) {
                     message = "No Letter Grabbed!";
                 } else {
                     message = "New Letters Grabbed!";
-                    Snackbar.make(view, message, Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
 
                     for (Marker marker : markersInRadius) {
                         marker.setVisible(false);
@@ -111,6 +109,7 @@ public class GmapFragment extends Fragment implements
 
                     markersInRadius.clear();
                 }
+                snackbar.setText(message).show();
             }
         });
 
@@ -124,7 +123,14 @@ public class GmapFragment extends Fragment implements
         fabButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                helper.startDeterminate();
+                // if the booster is not started already
+                if (state.getLosProgress() == 0) {
+                    helper.startDeterminate();
+                    multiplyLineOfSightDistance(2); // double the radius
+                    setLineOfSightRadiusAndColor(lineOfSightDistance, R.color.bt_red);
+                    hideAllMarkers();
+                    updateMarkers(oldLocation, state);
+                }
             }
         });
 
@@ -140,6 +146,14 @@ public class GmapFragment extends Fragment implements
         fragment.getMapAsync(this);
     }
 
+    public static void multiplyLineOfSightDistance(double val) {
+        lineOfSightDistance *= val;
+    }
+
+    public static int getLineOfSightDistance() {
+        return lineOfSightDistance;
+    }
+
     private String getUrl() {
 
         String[] days = {
@@ -150,6 +164,11 @@ public class GmapFragment extends Fragment implements
 
         return "http://www.inf.ed.ac.uk/teaching/courses/selp/coursework/" +
                 days[c.get(Calendar.DAY_OF_WEEK) - 1] + ".kml";
+    }
+
+    public static void setLineOfSightRadiusAndColor(int radius, int color) {
+        lineOfSight.setRadius(radius);
+        lineOfSight.setFillColor(color);
     }
 
     @Override
@@ -209,7 +228,6 @@ public class GmapFragment extends Fragment implements
 
         @Override
         protected void onPostExecute(List<KMLParser.Entry> result) {
-                locations = new ArrayList<Location>();
 
                 for (KMLParser.Entry entry : result) {
                     String letterDescription = entry.getDescription();
@@ -218,8 +236,7 @@ public class GmapFragment extends Fragment implements
                     Location loc = new Location("Provider");
                     loc.setLatitude(coordinates.latitude);
                     loc.setLongitude(coordinates.longitude);
-                    // add new created location to locations array
-                    locations.add(loc);
+
                     // add new created marker to markers array
                     Marker marker = mMap.addMarker(new MarkerOptions()
                             .position(coordinates)
@@ -232,7 +249,7 @@ public class GmapFragment extends Fragment implements
 
         private List<KMLParser.Entry> loadXmlFromNetwork(String urlString) throws
                 XmlPullParserException, IOException {
-            InputStream stream = null;
+            InputStream stream;
             KMLParser kmlParser = new KMLParser();
 
             List<KMLParser.Entry> entries = null;
@@ -240,12 +257,14 @@ public class GmapFragment extends Fragment implements
             try {
                 stream = downloadUrl(urlString);
                 entries = kmlParser.parse(stream);
-            }
-            finally {
                 if (stream != null) {
                     stream.close();
                 }
             }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+
             return entries;
         }
 
@@ -279,7 +298,6 @@ public class GmapFragment extends Fragment implements
         mLocationRequest.setInterval(10*1000);
         mLocationRequest.setFastestInterval(1000);
         mLocationRequest.setPriority(state.getLocationAccuracyMode());
-
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
     }
 
@@ -319,31 +337,9 @@ public class GmapFragment extends Fragment implements
         System.out.println("Connection Failed!");
     }
 
-    @Override
-    public void onLocationChanged(Location location) {
-        if (oldLocation != null) {
-            float[] dist = new float[2];
-            Location.distanceBetween(location.getLatitude(), location.getLongitude(),
-                    oldLocation.getLatitude(), oldLocation.getLongitude(), dist);
-            state.addDistance(dist[0]);
-        }
-        oldLocation = location;
-        System.out.println("Location Changed " + location.toString() + " distance:" +
-                state.getDistanceTraveled());
-        if (grabbingRadius != null) {
-            grabbingRadius.setCenter(new LatLng(location.getLatitude(), location.getLongitude()));
-        }
-        if (lineOfSight != null) {
-            lineOfSight.setCenter(new LatLng(location.getLatitude(), location.getLongitude()));
-        }
-
-        mMap.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(
-                location.getLatitude(), location.getLongitude()
-        )));
-
-        // set all visibleMarkers to false
-        for (Marker marker: visibleMarkers) {
-            marker.setVisible(false);
+    public static void updateMarkers(Location location, GameState state) {
+        if (location == null) {
+            return;
         }
         // clear efficiently visibleMarkers array after location change
         visibleMarkers.clear();
@@ -369,6 +365,43 @@ public class GmapFragment extends Fragment implements
                 markersInRadius.add(marker);
             }
         }
+    }
+
+    public static void hideAllMarkers() {
+        for (Marker marker: visibleMarkers) {
+            marker.setVisible(false);
+        }
+    }
+
+    public static Location getLocation() {
+        return oldLocation;
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        if (oldLocation != null) {
+            float[] dist = new float[2];
+            Location.distanceBetween(location.getLatitude(), location.getLongitude(),
+                    oldLocation.getLatitude(), oldLocation.getLongitude(), dist);
+            state.addDistance(dist[0]);
+        }
+        oldLocation = location;
+        System.out.println("Location Changed " + location.toString() + " distance:" +
+                state.getDistanceTraveled());
+        if (grabbingRadius != null) {
+            grabbingRadius.setCenter(new LatLng(location.getLatitude(), location.getLongitude()));
+        }
+        if (lineOfSight != null) {
+            lineOfSight.setCenter(new LatLng(location.getLatitude(), location.getLongitude()));
+        }
+
+        mMap.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(
+                location.getLatitude(), location.getLongitude()
+        )));
+
+        // update markers
+        hideAllMarkers();
+        updateMarkers(location, state);
 
     }
 

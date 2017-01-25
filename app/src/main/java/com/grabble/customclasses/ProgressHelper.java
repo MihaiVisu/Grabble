@@ -1,8 +1,12 @@
 package com.grabble.customclasses;
 
 import android.app.Activity;
+import android.graphics.Color;
+import android.location.Location;
 import android.os.Handler;
 import android.widget.Button;
+
+import com.grabble.Fragments.GmapFragment;
 
 import mbanje.kurt.fabbutton.FabButton;
 
@@ -30,12 +34,19 @@ public class ProgressHelper {
                     @Override
                     public void run() {
                         button.setProgress(state.getLosProgress());
-                        if(state.getLosProgress() <= 200){
+                        if(state.getLosProgress() <= 100){
                             handle.postDelayed(getRunnable(activity),50);
                         }
                         else {
                             state.setLosProgress(0);
                             button.setProgress(state.getLosProgress());
+                            GmapFragment.multiplyLineOfSightDistance(0.5);
+                            // reset the line of sight radius
+                            GmapFragment.setLineOfSightRadiusAndColor(
+                                    GmapFragment.getLineOfSightDistance(),
+                                    Color.parseColor("#70303F9F"));
+                            GmapFragment.hideAllMarkers();
+                            GmapFragment.updateMarkers(GmapFragment.getLocation(), state);
                         }
                     }
                 });
