@@ -254,6 +254,10 @@ public class GameState extends Application {
         this.distanceTraveled = distanceTraveled;
     }
 
+    public void useLosBooster() {
+        losBoosters -= 1;
+    }
+
     public void addDistance(double distance) {
         this.distanceTraveled += distance;
     }

@@ -21,6 +21,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -77,6 +78,9 @@ public class GmapFragment extends Fragment implements
     private static ArrayList<Marker> visibleMarkers = new ArrayList<>();
     private static ArrayList<Marker> markersInRadius = new ArrayList<>();
 
+    // declare the snackbar which is going to be used in the fragment
+    private static Snackbar snackbar;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -88,13 +92,14 @@ public class GmapFragment extends Fragment implements
         super.onViewCreated(view, savedInstanceState);
 
         state = ((GameState) getActivity().getApplicationContext());
+        snackbar = Snackbar.make(view, "", Snackbar.LENGTH_SHORT);
+
 
         FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String message = "";
-                Snackbar snackbar = Snackbar.make(view, message, Snackbar.LENGTH_SHORT);
                 if (markersInRadius.isEmpty()) {
                     message = "No Letter Grabbed!";
                 } else {
@@ -123,13 +128,21 @@ public class GmapFragment extends Fragment implements
         fabButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // if the booster is not started already
-                if (state.getLosProgress() == 0) {
-                    helper.startDeterminate();
-                    multiplyLineOfSightDistance(2); // double the radius
-                    setLineOfSightRadiusAndColor(lineOfSightDistance, R.color.bt_red);
-                    hideAllMarkers();
-                    updateMarkers(oldLocation, state);
+                // if we have boosters
+                if (state.getLosBoosters() > 0) {
+                    // if the booster is not started already
+                    if (state.getLosProgress() == 0) {
+                        helper.startDeterminate();
+                        multiplyLineOfSightDistance(2); // double the radius
+                        setLineOfSightRadiusAndColor(lineOfSightDistance, R.color.bt_red);
+                        hideAllMarkers();
+                        updateMarkers(oldLocation, state);
+                    } else {
+                        snackbar.setText("Booster is already in progress!").show();
+                    }
+                }
+                else {
+                    snackbar.setText("No boosters left!").show();
                 }
             }
         });
