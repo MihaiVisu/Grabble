@@ -1,36 +1,15 @@
 package com.grabble;
 
 
-import android.annotation.TargetApi;
-import android.content.Context;
-import android.content.Intent;
-import android.content.res.Configuration;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
-import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.SwitchPreference;
 import android.support.v7.app.ActionBar;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
-import android.preference.RingtonePreference;
-import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.view.MenuItem;
-import android.widget.Switch;
-import android.widget.Toast;
 
-import com.google.android.gms.games.Game;
-import com.google.android.gms.location.LocationRequest;
-import com.grabble.Fragments.GmapFragment;
 import com.grabble.customclasses.GameState;
-
-import java.util.List;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -68,11 +47,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if (state.getBatterySavingMode()) {
                     state.setBatterySavingMode(false);
-                    GmapFragment.setLocationRequestVariables(false);
                     return false;
                 }
                 state.setBatterySavingMode(true);
-                GmapFragment.setLocationRequestVariables(true);
                 return true;
             }
         });

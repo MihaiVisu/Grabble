@@ -10,6 +10,7 @@ import android.text.SpannableStringBuilder;
 import android.text.style.ImageSpan;
 import android.util.Pair;
 
+import com.grabble.Fragments.GmapFragment;
 import com.grabble.R;
 
 import java.io.BufferedReader;
@@ -329,6 +330,7 @@ public class GameState extends Application {
 
     public void setBatterySavingMode(boolean batterySavingMode) {
         this.batterySavingMode = batterySavingMode;
+        GmapFragment.setLocationRequestVariables(batterySavingMode);
     }
 
     public void setUsername(String username) {
