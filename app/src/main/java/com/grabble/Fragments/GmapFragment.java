@@ -118,6 +118,9 @@ public class GmapFragment extends Fragment implements
             }
         });
 
+        state.initializeAchievements();
+        state.checkMilestones(snackbar);
+
         final FabButton fabButton = (FabButton) getActivity().findViewById(R.id.los_fab);
         final ProgressHelper helper = new ProgressHelper(fabButton, this.getActivity());
 
@@ -399,6 +402,7 @@ public class GmapFragment extends Fragment implements
             state.addDistance(dist[0]);
         }
         oldLocation = location;
+        state.checkMilestones(snackbar);
         System.out.println("Location Changed " + location.toString() + " distance:" +
                 state.getDistanceTraveled());
         if (grabbingRadius != null) {

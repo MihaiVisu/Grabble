@@ -4,9 +4,11 @@ package com.grabble.customclasses;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.design.widget.Snackbar;
 import android.util.Pair;
 
 import com.google.android.gms.location.LocationRequest;
+import com.grabble.R;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -21,7 +23,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-
+import java.util.concurrent.Callable;
 
 
 /**
@@ -59,6 +61,7 @@ public class GameState extends Application {
 
     private ArrayList<Pair<String, Integer>> sortedWordsList;
     private SharedPreferences prefs;
+    private ArrayList<Achievement> achievements;
 
     // constructor
     @SuppressWarnings("unchecked")
@@ -170,6 +173,91 @@ public class GameState extends Application {
 
     public void setProgressStarted(boolean progressStarted) {
         this.progressStarted = progressStarted;
+    }
+
+    public ArrayList<Achievement> getAchievements() {
+        return achievements;
+    }
+
+    // check milestones of all achievements and update the achieved state
+    // if new achievement is reached, show a snackbar with a message
+    public void checkMilestones(Snackbar snackbar) {
+        for (Achievement achievement : achievements) {
+            try {
+                boolean previousState = achievement.getAchieved();
+                achievement.checkMilestone();
+                // if achievement just unlocked
+                if (achievement.getAchieved() && !previousState) {
+                    snackbar.setText("New achievement unlocked: " + achievement.getText());
+                    snackbar.show();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // function to initialize the achievements
+    public void initializeAchievements() {
+        if (achievements == null) {
+            achievements = new ArrayList<>();
+            achievements.add(new Achievement("Create first word", 50, 1, R.drawable.pacifier,
+                    new Callable<Boolean>() {
+                        @Override
+                        public Boolean call() throws Exception {
+                            return wordsCreated.size() >= 1;
+                        }
+                    }));
+            achievements.add(new Achievement("Travel 500m", 100, 2, R.drawable.road,
+                    new Callable<Boolean>() {
+                        @Override
+                        public Boolean call() throws Exception {
+                            return distanceTraveled >= 500;
+                        }
+                    }));
+            achievements.add(new Achievement("Travel 1500m", 250, 5, R.drawable.road_map,
+                    new Callable<Boolean>() {
+                        @Override
+                        public Boolean call() throws Exception {
+                            return distanceTraveled >= 1500;
+                        }
+                    }));
+            achievements.add(new Achievement("Travel 5000m", 400, 8, R.drawable.worldwide,
+                    new Callable<Boolean>() {
+                        @Override
+                        public Boolean call() throws Exception {
+                            return distanceTraveled >= 5000;
+                        }
+                    }));
+            achievements.add(new Achievement("Score 1500 points", 100, 2, R.drawable.medal,
+                    new Callable<Boolean>() {
+                        @Override
+                        public Boolean call() throws Exception {
+                            return totalScore >= 1500;
+                        }
+                    }));
+            achievements.add(new Achievement("Score 3000 points", 200, 4, R.drawable.trophy,
+                    new Callable<Boolean>() {
+                        @Override
+                        public Boolean call() throws Exception {
+                            return totalScore >= 1500;
+                        }
+                    }));
+            achievements.add(new Achievement("Collect 50 letters", 100, 2, R.drawable.letters,
+                    new Callable<Boolean>() {
+                        @Override
+                        public Boolean call() throws Exception {
+                            return lettersGrabbed.size() >= 50;
+                        }
+                    }));
+            achievements.add(new Achievement("Create 50 words", 100, 2, R.drawable.book,
+                    new Callable<Boolean>() {
+                        @Override
+                        public Boolean call() throws Exception {
+                            return wordsCreated.size() >= 50;
+                        }
+                    }));
+        }
     }
 
     public String getUsername() {

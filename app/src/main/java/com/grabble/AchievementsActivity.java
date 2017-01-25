@@ -12,19 +12,23 @@ import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.grabble.adapters.AchievementsAdapter;
 import com.grabble.adapters.CustomListAdapter;
 import com.grabble.customclasses.Achievement;
+import com.grabble.customclasses.GameState;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
 
 public class AchievementsActivity extends AppCompatActivity {
 
     private RecyclerView rv;
-    private ArrayList<Achievement> achievements;
+    private GameState state;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_achievements);
+
+        state = (GameState)getApplicationContext();
 
         rv = (RecyclerView) findViewById(R.id.achievements_list);
 
@@ -33,21 +37,10 @@ public class AchievementsActivity extends AppCompatActivity {
 
         rv.setLayoutManager(llm);
 
-        initializeAchievementsData();
-
-        rv.setAdapter(new AchievementsAdapter(achievements));
+        rv.setAdapter(new AchievementsAdapter(state.getAchievements()));
 
     }
 
-    private void initializeAchievementsData() {
-        achievements = new ArrayList<>();
-
-        achievements.add(new Achievement("Travel 500m", 100, 2, R.drawable.road));
-        achievements.add(new Achievement("Score 500 points", 100, 2, R.drawable.medal));
-        achievements.add(new Achievement("Score 1000 points", 100, 2, R.drawable.trophy));
-        achievements.add(new Achievement("Create 5 words", 100, 2, R.drawable.book));
-        achievements.add(new Achievement("Collect 50 letters", 100, 2, R.drawable.letters));
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

@@ -44,7 +44,8 @@
             android:layout_height="30dp"
             android:layout_below="@id/achievement_reward"
             android:id="@+id/achieved"
-            android:src="@drawable/success"/>
+            android:src="@drawable/success"
+            android:visibility="gone"/>
 
     </RelativeLayout>
 

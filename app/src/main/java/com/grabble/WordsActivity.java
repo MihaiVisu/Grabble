@@ -2,6 +2,7 @@ package com.grabble;
 
 import android.content.Intent;
 import android.support.annotation.IntegerRes;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -38,6 +39,8 @@ public class WordsActivity extends AppCompatActivity  implements View.OnClickLis
 
     Toast toast;
 
+    Snackbar snackbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +51,11 @@ public class WordsActivity extends AppCompatActivity  implements View.OnClickLis
         tl = (TableLayout) findViewById(R.id.words_table);
 
         toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
+
+        snackbar = Snackbar.make(findViewById(R.id.activity_words), "",
+                Snackbar.LENGTH_SHORT);
+
+
 
         InputFilter filter = new InputFilter() {
             @Override
@@ -175,6 +183,7 @@ public class WordsActivity extends AppCompatActivity  implements View.OnClickLis
             // action when user presses the create word button
             case R.id.create_word_button:
                 createWord();
+                state.checkMilestones(snackbar);
                 break;
             default:
                 break;

@@ -15,6 +15,8 @@ import com.grabble.customclasses.GameState;
 
 import java.util.ArrayList;
 
+import static android.view.View.VISIBLE;
+
 public class AchievementsAdapter extends
         RecyclerView.Adapter<AchievementsAdapter.AchievementViewHolder> {
 
@@ -24,7 +26,7 @@ public class AchievementsAdapter extends
         CardView cv;
         TextView text;
         TextView rewardText;
-        ImageView achievementImg;
+        ImageView achievementImg, achievedImg;
         GameState state;
 
         AchievementViewHolder(View itemView, GameState state) {
@@ -34,6 +36,7 @@ public class AchievementsAdapter extends
             text = (TextView) itemView.findViewById(R.id.achievement_text);
             rewardText = (TextView) itemView.findViewById(R.id.achievement_reward);
             achievementImg = (ImageView) itemView.findViewById(R.id.achievement_img);
+            achievedImg = (ImageView) itemView.findViewById(R.id.achieved);
         }
     }
 
@@ -55,10 +58,12 @@ public class AchievementsAdapter extends
     @Override
     public void onBindViewHolder(AchievementViewHolder holder, int position) {
         Achievement currentAchievement = achievements.get(position);
-        GameState state = holder.state;
         holder.text.setText(currentAchievement.getText());
         holder.rewardText.setText(currentAchievement.getRewardText());
         holder.achievementImg.setImageResource(currentAchievement.getImgId());
+        if (currentAchievement.getAchieved()) {
+            holder.achievedImg.setVisibility(VISIBLE);
+        }
     }
 
     @Override
