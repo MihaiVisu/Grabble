@@ -322,6 +322,7 @@ public class GmapFragment extends Fragment implements
             requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 100);
         }
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        createLocationRequest();
         if (mLastLocation!= null && mMap != null && lineOfSight == null && grabbingRadius == null) {
             lineOfSight = mMap.addCircle(new CircleOptions()
                     .center(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()))
@@ -337,7 +338,6 @@ public class GmapFragment extends Fragment implements
                     new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude())
             ));
         }
-        createLocationRequest();
     }
 
     @Override

@@ -6,12 +6,11 @@ import android.view.MenuItem;
 import android.widget.ListView;
 
 import com.amulyakhare.textdrawable.util.ColorGenerator;
-import com.grabble.customclasses.CustomListAdapter;
+import com.grabble.adapters.CustomListAdapter;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.grabble.customclasses.GameState;
 
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class LetterListActivity extends AppCompatActivity {

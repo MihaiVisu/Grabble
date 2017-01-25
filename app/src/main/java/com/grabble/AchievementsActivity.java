@@ -2,49 +2,51 @@ package com.grabble;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.widget.ListView;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
-import com.grabble.customclasses.CustomListAdapter;
+import com.grabble.adapters.AchievementsAdapter;
+import com.grabble.adapters.CustomListAdapter;
+import com.grabble.customclasses.Achievement;
+
+import java.util.ArrayList;
 
 
 public class AchievementsActivity extends AppCompatActivity {
+
+    private RecyclerView rv;
+    private ArrayList<Achievement> achievements;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_achievements);
 
-        ListView lst = (ListView)findViewById(R.id.achievement_list);
-        String[] achievements = new String[10];
-        for (int i = 1; i<= 10; i++) {
-            achievements[i-1] = "Achievement"+i + " description";
-        }
+        rv = (RecyclerView) findViewById(R.id.achievements_list);
 
-        String[] status = {
-                "unlocked",
-                "locked - Reward: 3x gems, 50x tokens",
-                "locked - Reward: 2x gems",
-                "unlocked",
-                "unlocked",
-                "unlocked",
-                "locked - Reward: 500x tokens",
-                "locked - Reward: 10x gems",
-                "locked - Reward: 4x gems, 300x tokens",
-                "locked - Reward: 2x word helpers, 10x gems"
-        };
+        rv.setHasFixedSize(true);
+        LinearLayoutManager llm = new LinearLayoutManager(this);
 
-        ColorGenerator cgen = ColorGenerator.MATERIAL;
+        rv.setLayoutManager(llm);
 
-        TextDrawable[] drawables = new TextDrawable[achievements.length];
-        for (int i = 1; i <= 10; i++) {
-            drawables[i-1] = TextDrawable.builder().buildRound(Integer.toString(i), cgen.getRandomColor());
-        }
+        initializeAchievementsData();
 
-        CustomListAdapter adapter = new CustomListAdapter(this, R.layout.activity_achievements, achievements, status, drawables);
-        lst.setAdapter(adapter);
+        rv.setAdapter(new AchievementsAdapter(achievements));
+
+    }
+
+    private void initializeAchievementsData() {
+        achievements = new ArrayList<>();
+
+        achievements.add(new Achievement("Travel 500m", 100, 2, R.drawable.road));
+        achievements.add(new Achievement("Score 500 points", 100, 2, R.drawable.medal));
+        achievements.add(new Achievement("Score 1000 points", 100, 2, R.drawable.trophy));
+        achievements.add(new Achievement("Create 5 words", 100, 2, R.drawable.book));
+        achievements.add(new Achievement("Collect 50 letters", 100, 2, R.drawable.letters));
     }
 
     @Override
