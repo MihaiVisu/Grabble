@@ -44,8 +44,12 @@ public class GameState extends Application {
     private int distanceTraveled;
     private String username;
 
+    // --- variables for settings ---
     // variables for battery saving mode
     private boolean batterySavingMode;
+    // variables for night mode
+    private boolean nightMode;
+    // ---
 
     // variables for progress bar
     private int losProgress;
@@ -163,6 +167,10 @@ public class GameState extends Application {
     }
 
     // getters for the global variables
+
+    public boolean getNightMode() {
+        return nightMode;
+    }
 
     public boolean getBatterySavingMode() {
         return batterySavingMode;
@@ -327,6 +335,10 @@ public class GameState extends Application {
     }
 
     // setters for the global variables
+
+    public void setNightMode(boolean nightMode) {
+        this.nightMode = nightMode;
+    }
 
     public void setBatterySavingMode(boolean batterySavingMode) {
         this.batterySavingMode = batterySavingMode;

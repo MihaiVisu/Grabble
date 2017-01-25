@@ -9,6 +9,8 @@ import android.preference.SwitchPreference;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 
+import com.google.android.gms.maps.model.MapStyleOptions;
+import com.grabble.Fragments.GmapFragment;
 import com.grabble.customclasses.GameState;
 
 /**
@@ -40,20 +42,30 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
         state = (GameState) getApplicationContext();
 
-        // configure battery saving mode switch
-        nightMode = (SwitchPreference) findPreference("battery_saving_mode");
+        // configure the night mode switch
+        nightMode = (SwitchPreference) findPreference("night_mode");
         nightMode.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                if (state.getBatterySavingMode()) {
-                    state.setBatterySavingMode(false);
-                    return false;
-                }
-                state.setBatterySavingMode(true);
+                boolean val = (boolean) newValue;
+                int mapStyle = (val) ? R.raw.night_mode_map : R.raw.standard_map;
+                state.setNightMode(val);
+                GmapFragment.getMap().setMapStyle(MapStyleOptions.loadRawResourceStyle(getApplicationContext(),
+                        mapStyle));
                 return true;
             }
         });
 
+        // configure battery saving mode switch
+        batterySavingMode = (SwitchPreference) findPreference("battery_saving_mode");
+        batterySavingMode.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                boolean val = (boolean) newValue;
+                state.setBatterySavingMode(val);
+                return true;
+            }
+        });
 
     }
 

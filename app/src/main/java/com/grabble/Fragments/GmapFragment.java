@@ -35,6 +35,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.grabble.customclasses.GameState;
@@ -63,7 +64,7 @@ public class GmapFragment extends Fragment implements
     private static Location mLastLocation;
     private  static Location oldLocation;
     private static LocationRequest mLocationRequest;
-    private GoogleMap mMap;
+    private  static GoogleMap mMap;
 
     // circles representing line of sight and grabbing radius
     private static Circle lineOfSight, grabbingRadius;
@@ -154,7 +155,6 @@ public class GmapFragment extends Fragment implements
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this).addApi(LocationServices.API).build();
         }
-
         MapFragment fragment = (MapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.map);
 
@@ -167,6 +167,10 @@ public class GmapFragment extends Fragment implements
 
     public static int getLineOfSightDistance() {
         return lineOfSightDistance;
+    }
+
+    public static GoogleMap getMap() {
+        return mMap;
     }
 
     private String getUrl() {
@@ -206,6 +210,10 @@ public class GmapFragment extends Fragment implements
     public void onMapReady(GoogleMap googleMap) {
 
         mMap = googleMap;
+        if (state.getNightMode()) {
+            mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(
+                    this.getActivity(), R.raw.night_mode_map));
+        }
 
         mMap.getUiSettings().setMapToolbarEnabled(false);
 
