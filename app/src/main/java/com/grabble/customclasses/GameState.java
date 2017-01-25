@@ -258,6 +258,10 @@ public class GameState extends Application {
         losBoosters -= 1;
     }
 
+    public void useWordHelper() {
+        wordHelpers -= 1;
+    }
+
     public void addDistance(double distance) {
         this.distanceTraveled += distance;
     }

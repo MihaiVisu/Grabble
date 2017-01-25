@@ -159,9 +159,17 @@ public class WordsActivity extends AppCompatActivity  implements View.OnClickLis
                 startActivity(i);
                 break;
             case R.id.get_suggestion_button:
-                String wordSuggestion = getSuggestion();
-                if (wordSuggestion != null) {
-                    createSuggestionAllert(wordSuggestion);
+                // if we have any helpers left
+                if (state.getWordHelpers() > 0) {
+                    String wordSuggestion = getSuggestion();
+                    if (wordSuggestion != null) {
+                        createSuggestionAllert(wordSuggestion);
+                    }
+                    state.useWordHelper();
+                }
+                else {
+                    toast.setText("No word helpers left!");
+                    toast.show();
                 }
                 break;
             // action when user presses the create word button
