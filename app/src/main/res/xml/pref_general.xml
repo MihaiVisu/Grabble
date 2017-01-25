@@ -2,13 +2,13 @@
 
     <SwitchPreference
         android:defaultValue="false"
-        android:key="example_switch"
+        android:key="night_mode"
         android:summary="Night mode changes colors to a more visually comfortable palette during night."
         android:title="Enable Night Mode" />
 
     <SwitchPreference
         android:defaultValue="false"
-        android:key="example_switch"
+        android:key="battery_saving_mode"
         android:summary="Battery Saving Mode lowers the usage of some services to preserve battery lufe."
         android:title="Enable Battery Saving Mode" />
 
@@ -16,9 +16,8 @@
     <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
     <EditTextPreference
         android:capitalize="words"
-        android:defaultValue="@string/pref_default_display_name"
         android:inputType="textCapWords"
-        android:key="example_text"
+        android:key="display_name_edit"
         android:maxLines="1"
         android:selectAllOnFocus="true"
         android:singleLine="true"

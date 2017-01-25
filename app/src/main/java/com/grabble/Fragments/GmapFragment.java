@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -21,7 +22,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -62,7 +62,7 @@ public class GmapFragment extends Fragment implements
     private GoogleApiClient mGoogleApiClient;
     private static Location mLastLocation;
     private  static Location oldLocation;
-    private LocationRequest mLocationRequest;
+    private static LocationRequest mLocationRequest;
     private GoogleMap mMap;
 
     // circles representing line of sight and grabbing radius
@@ -310,10 +310,27 @@ public class GmapFragment extends Fragment implements
         }
 
         mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(10*1000);
-        mLocationRequest.setFastestInterval(1000);
-        mLocationRequest.setPriority(state.getLocationAccuracyMode());
+
+        setLocationRequestVariables(state.getBatterySavingMode());
+
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+    }
+
+    public static void setLocationRequestVariables(boolean batterySavingMode) {
+        // set variables for battery saving mode
+        int locationAccuracyMode, interval;
+
+        if (batterySavingMode) {
+            locationAccuracyMode = LocationRequest.PRIORITY_LOW_POWER;
+            interval = 20;
+        }
+        else {
+            locationAccuracyMode = LocationRequest.PRIORITY_HIGH_ACCURACY;
+            interval = 10;
+        }
+        mLocationRequest.setInterval(interval*1000);
+        mLocationRequest.setFastestInterval(1000);
+        mLocationRequest.setPriority(locationAccuracyMode);
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -390,6 +407,10 @@ public class GmapFragment extends Fragment implements
 
     public static Location getLocation() {
         return oldLocation;
+    }
+
+    public static LocationRequest getLocationRequest() {
+        return mLocationRequest;
     }
 
     @Override

@@ -9,9 +9,7 @@ import android.support.design.widget.Snackbar;
 import android.text.SpannableStringBuilder;
 import android.text.style.ImageSpan;
 import android.util.Pair;
-import android.view.View;
 
-import com.google.android.gms.location.LocationRequest;
 import com.grabble.R;
 
 import java.io.BufferedReader;
@@ -43,8 +41,10 @@ public class GameState extends Application {
     private int losBoosters;
     private int wordHelpers;
     private int distanceTraveled;
-    private int locationAccuracyMode;
     private String username;
+
+    // variables for battery saving mode
+    private boolean batterySavingMode;
 
     // variables for progress bar
     private int losProgress;
@@ -83,7 +83,7 @@ public class GameState extends Application {
         losBoosters = prefs.getInt("losBoosters", 0);
         wordHelpers = prefs.getInt("wordHelpers", 0);
         distanceTraveled = prefs.getInt("distanceTraveled", 0);
-        locationAccuracyMode = prefs.getInt("accuracyMode", LocationRequest.PRIORITY_HIGH_ACCURACY);
+        batterySavingMode = prefs.getBoolean("batterySavingMode", false);
 
         try {
             File internalFile = new File(context.getFilesDir(), "internalFile.txt");
@@ -163,8 +163,8 @@ public class GameState extends Application {
 
     // getters for the global variables
 
-    public int getLocationAccuracyMode() {
-        return locationAccuracyMode;
+    public boolean getBatterySavingMode() {
+        return batterySavingMode;
     }
 
     public int getLosProgress() {
@@ -327,6 +327,10 @@ public class GameState extends Application {
 
     // setters for the global variables
 
+    public void setBatterySavingMode(boolean batterySavingMode) {
+        this.batterySavingMode = batterySavingMode;
+    }
+
     public void setUsername(String username) {
         this.username = username;
     }
@@ -474,7 +478,7 @@ public class GameState extends Application {
         editor.putInt("losBoosters", losBoosters);
         editor.putInt("wordHelpers", wordHelpers);
         editor.putInt("distanceTraveled", distanceTraveled);
-        editor.putInt("accuracyMode", locationAccuracyMode);
+        editor.putBoolean("batterySavingMode", batterySavingMode);
 
         editor.apply();
     }
