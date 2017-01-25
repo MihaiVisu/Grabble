@@ -1,10 +1,9 @@
-package com.grabble.customclasses;
+package com.grabble.adapters;
 
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.support.design.widget.TabLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -17,6 +16,8 @@ import android.widget.Toast;
 
 import com.braintreepayments.api.PaymentRequest;
 import com.grabble.R;
+import com.grabble.customclasses.BundleOffer;
+import com.grabble.customclasses.GameState;
 
 import java.util.ArrayList;
 
@@ -51,7 +52,7 @@ public class BundlePackAdapter extends RecyclerView.Adapter<BundlePackAdapter.Bu
 
     @Override
     public BundleViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.cv, viewGroup, false);
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.bundle_pack_cv, viewGroup, false);
         return new BundleViewHolder(v, (GameState) v.getContext().getApplicationContext());
     }
 
