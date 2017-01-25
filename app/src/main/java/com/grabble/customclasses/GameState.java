@@ -4,8 +4,12 @@ package com.grabble.customclasses;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.support.design.widget.Snackbar;
+import android.text.SpannableStringBuilder;
+import android.text.style.ImageSpan;
 import android.util.Pair;
+import android.view.View;
 
 import com.google.android.gms.location.LocationRequest;
 import com.grabble.R;
@@ -188,13 +192,23 @@ public class GameState extends Application {
                 achievement.checkMilestone();
                 // if achievement just unlocked
                 if (achievement.getAchieved() && !previousState) {
-                    snackbar.setText("New achievement unlocked: " + achievement.getText());
-                    snackbar.show();
+                    showAchievementSnackbar(snackbar, achievement);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void showAchievementSnackbar(Snackbar snackbar, Achievement achievement) {
+        SpannableStringBuilder builder = new SpannableStringBuilder();
+        String message = "New Achievement: " + achievement.getText() + "   ";
+        builder.append(message);
+        Drawable icon = getDrawable(achievement.getImgId());
+        icon.setBounds(0,0,80,80);
+        builder.setSpan(new ImageSpan(icon), builder.length()-1, builder.length(), 0);
+        snackbar.setText(builder);
+        snackbar.show();
     }
 
     // function to initialize the achievements
@@ -206,6 +220,13 @@ public class GameState extends Application {
                         @Override
                         public Boolean call() throws Exception {
                             return wordsCreated.size() >= 1;
+                        }
+                    }));
+            achievements.add(new Achievement("Collect 50 letters", 50, 1, R.drawable.first_letters,
+                    new Callable<Boolean>() {
+                        @Override
+                        public Boolean call() throws Exception {
+                            return lettersGrabbed.size() >= 10;
                         }
                     }));
             achievements.add(new Achievement("Travel 500m", 100, 2, R.drawable.road,
@@ -243,14 +264,14 @@ public class GameState extends Application {
                             return totalScore >= 1500;
                         }
                     }));
-            achievements.add(new Achievement("Collect 50 letters", 100, 2, R.drawable.letters,
+            achievements.add(new Achievement("Collect 200 letters", 100, 2, R.drawable.letters,
                     new Callable<Boolean>() {
                         @Override
                         public Boolean call() throws Exception {
-                            return lettersGrabbed.size() >= 50;
+                            return lettersGrabbed.size() >= 100;
                         }
                     }));
-            achievements.add(new Achievement("Create 50 words", 100, 2, R.drawable.book,
+            achievements.add(new Achievement("Create 50 words", 400, 8, R.drawable.book,
                     new Callable<Boolean>() {
                         @Override
                         public Boolean call() throws Exception {

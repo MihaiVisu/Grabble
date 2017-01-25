@@ -99,7 +99,7 @@ public class GmapFragment extends Fragment implements
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String message = "";
+                String message;
                 if (markersInRadius.isEmpty()) {
                     message = "No Letter Grabbed!";
                 } else {
@@ -118,7 +118,6 @@ public class GmapFragment extends Fragment implements
             }
         });
 
-        state.initializeAchievements();
         state.checkMilestones(snackbar);
 
         final FabButton fabButton = (FabButton) getActivity().findViewById(R.id.los_fab);
