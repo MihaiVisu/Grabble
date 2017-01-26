@@ -58,4 +58,12 @@ public class Achievement {
         return reward;
     }
 
+    public int getTokenReward() {
+        return tokenReward;
+    }
+
+    public int getGemReward() {
+        return gemReward;
+    }
+
 }

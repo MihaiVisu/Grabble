@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.facebook.Profile;
 import com.facebook.login.widget.ProfilePictureView;
-import com.google.android.gms.games.Game;
 import com.grabble.customclasses.GameState;
 
 public class ProfileActivity extends AppCompatActivity
@@ -40,7 +39,7 @@ public class ProfileActivity extends AppCompatActivity
         profileUserName.setText(state.getUsername());
 
         TextView profileTokens = (TextView) findViewById(R.id.profile_tokens);
-        profileTokens.setText(String.valueOf(state.getCash()));
+        profileTokens.setText(String.valueOf(state.getTokens()));
 
         TextView profileGems = (TextView) findViewById(R.id.profile_gems);
         profileGems.setText(String.valueOf(state.getGems()));

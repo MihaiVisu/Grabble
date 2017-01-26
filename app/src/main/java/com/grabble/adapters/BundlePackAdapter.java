@@ -124,7 +124,7 @@ public class BundlePackAdapter extends RecyclerView.Adapter<BundlePackAdapter.Bu
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                if (state.getCash() < currentBundleOffer.getTokenPrice()) {
+                                if (state.getTokens() < currentBundleOffer.getTokenPrice()) {
                                     toast.setText("Not enough tokens to buy the selected pack.");
                                     toast.show();
                                 }

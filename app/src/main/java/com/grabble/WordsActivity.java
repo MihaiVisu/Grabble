@@ -80,6 +80,13 @@ public class WordsActivity extends AppCompatActivity  implements View.OnClickLis
             }
         };
 
+        // add already created words to the table
+        for (String word : state.getWordsCreated().keySet()) {
+            addNewWordToList(word);
+        }
+
+        System.out.println(state.getWordsCreated().size());
+
         letterListButton = (Button) findViewById(R.id.button3);
         letterListButton.setOnClickListener(this);
 
@@ -92,6 +99,15 @@ public class WordsActivity extends AppCompatActivity  implements View.OnClickLis
         LinearLayout topLayout = (LinearLayout) findViewById(R.id.activity_words);
         LinearLayout letterBoxesLayout = (LinearLayout) topLayout.getChildAt(0);
 
+        configureTextFilters(letterBoxesLayout, filter);
+
+        if(isWordFormFull()) {
+            createWordButton.setEnabled(true);
+        }
+
+    }
+
+    private void configureTextFilters(LinearLayout letterBoxesLayout, InputFilter filter) {
         for (int i = 0; i < letterBoxesLayout.getChildCount(); i++) {
             letterBoxes[i] = (EditText) letterBoxesLayout.getChildAt(i);
             letterBoxes[i].setFilters(new InputFilter[] {filter, new InputFilter.LengthFilter(1)});
@@ -130,11 +146,6 @@ public class WordsActivity extends AppCompatActivity  implements View.OnClickLis
                 }
             });
         }
-
-        if(isWordFormFull()) {
-            createWordButton.setEnabled(true);
-        }
-
     }
 
     private boolean isWordFormFull() {

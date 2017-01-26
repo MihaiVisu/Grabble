@@ -38,7 +38,7 @@ public class GameState extends Application {
     private Context context;
     private int totalScore;
     private int gems;
-    private int cash;
+    private int tokens;
     private int losBoosters;
     private int wordHelpers;
     private int distanceTraveled;
@@ -84,7 +84,7 @@ public class GameState extends Application {
         username = prefs.getString("username", "Player");
         totalScore = prefs.getInt("totalScore", 0);
         gems = prefs.getInt("gems", 0);
-        cash = prefs.getInt("cash", 0);
+        tokens = prefs.getInt("tokens", 0);
         losBoosters = prefs.getInt("losBoosters", 0);
         wordHelpers = prefs.getInt("wordHelpers", 0);
         distanceTraveled = prefs.getInt("distanceTraveled", 0);
@@ -202,6 +202,8 @@ public class GameState extends Application {
                 // if achievement just unlocked
                 if (achievement.getAchieved() && !previousState) {
                     showAchievementSnackbar(snackbar, achievement);
+                    gems += achievement.getGemReward();
+                    tokens += achievement.getTokenReward();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -302,8 +304,8 @@ public class GameState extends Application {
         return gems;
     }
 
-    public int getCash() {
-        return cash;
+    public int getTokens() {
+        return tokens;
     }
 
     public int getLosBoosters() {
@@ -357,8 +359,8 @@ public class GameState extends Application {
         this.gems = gems;
     }
 
-    public void setCash(int cash) {
-        this.cash = cash;
+    public void setTokens(int tokens) {
+        this.tokens = tokens;
     }
 
     public void setLosBoosters(int losBoosters) {
@@ -457,16 +459,16 @@ public class GameState extends Application {
         int score = calculateWordScore(word);
         wordsCreated.put(word, score);
         totalScore += score;
-        cash += score;
+        tokens += score;
     }
 
-    // method which updates cash and amount of boosters
+    // method which updates tokens and amount of boosters
     // assuming we have enough money
     public void buyBoosters(int quantity, String type, String currency, int price) {
         if (type.equals("los")) {
             losBoosters += quantity;
-            if (currency.equals("cash")) {
-                cash -= price;
+            if (currency.equals("tokens")) {
+                tokens -= price;
             }
             else if (currency.equals("gems")) {
                 gems -= price;
@@ -488,7 +490,7 @@ public class GameState extends Application {
         editor.putString("username", username);
         editor.putInt("totalScore", totalScore);
         editor.putInt("gems", gems);
-        editor.putInt("cash", cash);
+        editor.putInt("tokens", tokens);
         editor.putInt("losBoosters", losBoosters);
         editor.putInt("wordHelpers", wordHelpers);
         editor.putInt("distanceTraveled", distanceTraveled);
