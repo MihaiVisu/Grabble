@@ -184,6 +184,10 @@ public class WordsActivity extends AppCompatActivity  implements View.OnClickLis
                     if (wordSuggestion != null) {
                         createSuggestionAllert(wordSuggestion);
                     }
+                    else {
+                        toast.setText("No possible words at the moment." +
+                                "Get more letters!");
+                    }
                     state.useWordHelper();
                 }
                 else {
@@ -218,7 +222,10 @@ public class WordsActivity extends AppCompatActivity  implements View.OnClickLis
             for (char c : word.first.toLowerCase().toCharArray()) {
                 int index = (int)c-'a';
                 freqs[index]++;
-                if (freqs[index] > lettersGrabbed.get(String.valueOf(c))) {
+                if (!lettersGrabbed.containsKey(String.valueOf(c))) {
+                    wordFound = false;
+                }
+                else if (freqs[index] > lettersGrabbed.get(String.valueOf(c))) {
                     wordFound = false;
                 }
             }
