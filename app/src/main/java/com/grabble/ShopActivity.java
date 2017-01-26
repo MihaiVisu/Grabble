@@ -1,5 +1,7 @@
 package com.grabble;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,6 +20,8 @@ import android.view.ViewGroup;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.braintreepayments.api.BraintreePaymentActivity;
+import com.braintreepayments.api.models.PaymentMethodNonce;
 import com.grabble.customclasses.BundleOffer;
 import com.grabble.adapters.BundlePackAdapter;
 
@@ -58,6 +62,20 @@ public class ShopActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
+    }
+
+    // handle the onactivity result when getting a result from Braintree server
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 1) {
+            if (resultCode == Activity.RESULT_OK) {
+                PaymentMethodNonce paymentMethodNonce = data.getParcelableExtra(
+                        BraintreePaymentActivity.EXTRA_PAYMENT_METHOD_NONCE);
+                System.out.println(data.getExtras().toString());
+
+            }
+        }
     }
 
 

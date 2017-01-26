@@ -159,7 +159,8 @@ public class NavActivity extends AppCompatActivity
         } else if (id == R.id.nav_share) {
             i = new Intent();
             i.setAction(Intent.ACTION_SEND);
-            i.putExtra(Intent.EXTRA_TEXT, "I have a total score of " + state.getTotalScore() + ".");
+            i.putExtra(Intent.EXTRA_TEXT, "I have a total score of " + state.getTotalScore() +
+                    "on Grabble.");
             i.setType("text/plain");
             startActivity(Intent.createChooser(i, "Send To"));
         }
