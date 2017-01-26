@@ -15,6 +15,7 @@ import com.grabble.customclasses.GameState;
 
 import java.util.ArrayList;
 
+import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 public class AchievementsAdapter extends
@@ -29,7 +30,6 @@ public class AchievementsAdapter extends
         TextView rewardText;
         ImageView achievementImg, achievedImg;
         GameState state;
-        static int index = 0;
 
         AchievementViewHolder(View itemView, GameState state) {
             super(itemView);
@@ -39,7 +39,6 @@ public class AchievementsAdapter extends
             rewardText = (TextView) itemView.findViewById(R.id.achievement_reward);
             achievementImg = (ImageView) itemView.findViewById(R.id.achievement_img);
             achievedImg = (ImageView) itemView.findViewById(R.id.achieved);
-            itemView.setId(index);
         }
     }
 
@@ -66,6 +65,9 @@ public class AchievementsAdapter extends
         holder.achievementImg.setImageResource(currentAchievement.getImgId());
         if (currentAchievement.getAchieved()) {
             holder.achievedImg.setVisibility(VISIBLE);
+        }
+        else {
+            holder.achievedImg.setVisibility(GONE);
         }
     }
 

@@ -211,13 +211,21 @@ public class GmapFragment extends Fragment implements
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
+        if (!mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.connect();
+        }
+
         mMap = googleMap;
         if (state.getNightMode()) {
             mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(
                     this.getActivity(), R.raw.night_mode_map));
         }
-
         mMap.getUiSettings().setMapToolbarEnabled(false);
+
+        // if we have night mode enabled
+        if (state.getNightMode()) {
+            mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getActivity(), R.raw.night_mode_map));
+        }
 
         if (ActivityCompat.checkSelfPermission(this.getActivity(),
                 Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
@@ -229,6 +237,7 @@ public class GmapFragment extends Fragment implements
 //            return;
         } else {
             mMap.setMyLocationEnabled(true);
+            handleNewLocation();
         }
 
         ConnectivityManager connMgr = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -323,7 +332,8 @@ public class GmapFragment extends Fragment implements
 
                     // permission granted
                     try {
-                        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+                        mLastLocation = LocationServices.FusedLocationApi
+                                .getLastLocation(mGoogleApiClient);
                         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
                                 mLocationRequest, this);
                         mMap.setMyLocationEnabled(true);

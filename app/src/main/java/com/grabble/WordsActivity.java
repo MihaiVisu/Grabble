@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.grabble.customclasses.GameState;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class WordsActivity extends AppCompatActivity  implements View.OnClickListener {
@@ -40,6 +41,8 @@ public class WordsActivity extends AppCompatActivity  implements View.OnClickLis
     Toast toast;
 
     Snackbar snackbar;
+
+    private int[] typedLetters = new int[26];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +65,7 @@ public class WordsActivity extends AppCompatActivity  implements View.OnClickLis
             public CharSequence filter(CharSequence source, int start, int end,
                                        Spanned dest, int dstart, int dend) {
 
-                String typedChar = source.toString();
+                String typedChar = source.toString().toLowerCase();
 
                 if (!Character.isLetter(typedChar.charAt(0)) && typedChar.length() != 0) {
                     toast.setText("You must type a letter!");
@@ -74,6 +77,17 @@ public class WordsActivity extends AppCompatActivity  implements View.OnClickLis
                     toast.setText("Letter " + typedChar.charAt(0) + " is not collected!");
                     toast.show();
                     return "";
+                }
+
+                // check letter frequency
+                updateletterFrequency();
+                if (typedChar.length() > 0) {
+                    if (typedLetters[typedChar.charAt(0) - 'a']+1 > state.getLettersGrabbed()
+                            .get(typedChar)) {
+                        toast.setText("You don't have any " + typedChar.toUpperCase() + " left!");
+                        toast.show();
+                        return "";
+                    }
                 }
 
                 return null;
@@ -105,6 +119,15 @@ public class WordsActivity extends AppCompatActivity  implements View.OnClickLis
             createWordButton.setEnabled(true);
         }
 
+    }
+
+    private void updateletterFrequency() {
+        Arrays.fill(typedLetters, 0);
+        for (EditText letterBox : letterBoxes) {
+            if (letterBox.getText().length() > 0) {
+                typedLetters[letterBox.getText().charAt(0) - 'a']++;
+            }
+        }
     }
 
     private void configureTextFilters(LinearLayout letterBoxesLayout, InputFilter filter) {

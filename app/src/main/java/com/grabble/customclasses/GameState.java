@@ -101,6 +101,7 @@ public class GameState extends Application {
         wordHelpers = prefs.getInt("wordHelpers", 0);
         distanceTraveled = prefs.getInt("distanceTraveled", 0);
         batterySavingMode = prefs.getBoolean("batterySavingMode", false);
+        nightMode = prefs.getBoolean("nightMode", false);
 
         try {
             File internalFile = new File(context.getFilesDir(), "internalFile.txt");
@@ -270,13 +271,6 @@ public class GameState extends Application {
                             return distanceTraveled >= 1000;
                         }
                     }));
-            achievements.add(new Achievement("Travel 5000m", 400, 8, R.drawable.worldwide,
-                    new Callable<Boolean>() {
-                        @Override
-                        public Boolean call() throws Exception {
-                            return distanceTraveled >= 5000;
-                        }
-                    }));
             achievements.add(new Achievement("Score 1500 points", 100, 2, R.drawable.medal,
                     new Callable<Boolean>() {
                         @Override
@@ -291,6 +285,14 @@ public class GameState extends Application {
                             return wordsCreated.size() >= 50;
                         }
                     }));
+            achievements.add(new Achievement("Travel 3000m", 300, 6, R.drawable.road_map,
+                    new Callable<Boolean>() {
+                        @Override
+                        public Boolean call() throws Exception {
+                            return distanceTraveled >= 3000;
+                        }
+                    }));
+
             achievements.add(new Achievement("Score 3000 points", 300, 6, R.drawable.trophy,
                     new Callable<Boolean>() {
                         @Override
@@ -298,6 +300,14 @@ public class GameState extends Application {
                             return totalScore >= 3000;
                         }
                     }));
+            achievements.add(new Achievement("Travel 5000m", 400, 8, R.drawable.worldwide,
+                    new Callable<Boolean>() {
+                        @Override
+                        public Boolean call() throws Exception {
+                            return distanceTraveled >= 5000;
+                        }
+                    }));
+
             achievements.add(new Achievement("Collect 400 letters", 100, 2, R.drawable.letters,
                     new Callable<Boolean>() {
                         @Override
@@ -540,6 +550,7 @@ public class GameState extends Application {
         editor.putInt("wordHelpers", wordHelpers);
         editor.putInt("distanceTraveled", distanceTraveled);
         editor.putBoolean("batterySavingMode", batterySavingMode);
+        editor.putBoolean("nightMode", nightMode);
 
         editor.apply();
     }

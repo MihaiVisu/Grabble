@@ -135,7 +135,7 @@ public class BundlePackAdapter extends RecyclerView.Adapter<BundlePackAdapter.Bu
                                 }
                                 else {
                                     state.buyBoosters(currentBundleOffer.getQuantity(),
-                                            "los", "cash", currentBundleOffer.getTokenPrice());
+                                            "los", "tokens", currentBundleOffer.getTokenPrice());
                                     NavActivity.updateContent(state);
                                 }
                             }
