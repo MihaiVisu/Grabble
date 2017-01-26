@@ -110,10 +110,9 @@ public class BundlePackAdapter extends RecyclerView.Adapter<BundlePackAdapter.Bu
                             .clientToken(TOKEN);
                     ((Activity) mContext).startActivityForResult(paymentRequest.getIntent(v.getContext()
                             .getApplicationContext()), REQUEST_CODE);
-                    TextView amount = (TextView)((Activity) mContext)
-                            .findViewById(R.id.bundle_quantity);
-                    int am = Integer.parseInt(amount.getText().toString());
-                    state.setGems(state.getGems() + am);
+                    // do some dummy transactions as we have a demo token
+                    state.setPaymentRequest(currentBundleOffer.getQuantity(),
+                            currentBundleOffer.getCashPrice());
                 }
             }
         });

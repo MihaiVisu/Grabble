@@ -24,6 +24,7 @@ import com.braintreepayments.api.BraintreePaymentActivity;
 import com.braintreepayments.api.models.PaymentMethodNonce;
 import com.grabble.customclasses.BundleOffer;
 import com.grabble.adapters.BundlePackAdapter;
+import com.grabble.customclasses.GameState;
 
 import java.util.ArrayList;
 
@@ -43,11 +44,14 @@ public class ShopActivity extends AppCompatActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+    private GameState state;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shop);
+
+        state = (GameState) getApplicationContext();
 
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
@@ -72,8 +76,15 @@ public class ShopActivity extends AppCompatActivity {
             if (resultCode == Activity.RESULT_OK) {
                 PaymentMethodNonce paymentMethodNonce = data.getParcelableExtra(
                         BraintreePaymentActivity.EXTRA_PAYMENT_METHOD_NONCE);
-                System.out.println(data.getExtras().toString());
-
+                // if we made a payment request with a certain amount of money, then
+                // add the specified amount
+                if (state.getPaymentRequest() != 0 && state.getPaymentPrice() != 0) {
+                    state.setGems(state.getGems() + state.getPaymentRequest());
+                    // update nav activity content
+                    NavActivity.updateContent(state);
+                    // reset payment request to 0 in state
+                    state.setPaymentRequest(0, 0);
+                }
             }
         }
     }

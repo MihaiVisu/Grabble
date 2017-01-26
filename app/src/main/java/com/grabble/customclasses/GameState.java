@@ -60,6 +60,10 @@ public class GameState extends Application {
     private int losProgress;
     private boolean progressStarted;
 
+    // variable in which we store the amount of the payment request
+    private int paymentRequest;
+    private double paymentPrice;
+
     private static final int[] scores = {
             3, 20, 13, 10, 1, 15, 18, 9, 5, 25, 22, 11, 14,
             6, 4, 19, 24, 8, 7, 2, 12, 21, 17, 23, 16, 26
@@ -451,6 +455,19 @@ public class GameState extends Application {
                 lettersGrabbed.put(letter, freq-1);
             }
         }
+    }
+
+    public int getPaymentRequest() {
+        return paymentRequest;
+    }
+
+    public double getPaymentPrice() {
+        return paymentPrice;
+    }
+
+    public void setPaymentRequest(int amount, double price) {
+        paymentRequest = amount;
+        paymentPrice = price;
     }
 
     public void removeLetter(char letter) {
