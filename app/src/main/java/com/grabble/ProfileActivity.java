@@ -15,18 +15,24 @@ import com.grabble.customclasses.GameState;
 public class ProfileActivity extends AppCompatActivity
         implements View.OnClickListener{
 
-    private Button btn1;
-    private GameState state;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        state = (GameState) getApplicationContext();
+        GameState state = (GameState) getApplicationContext();
 
-        btn1 = (Button)findViewById(R.id.show_letters_gathered);
+        Button btn1 = (Button) findViewById(R.id.show_letters_gathered);
         btn1.setOnClickListener(this);
+
+        Button btn2 = (Button) findViewById(R.id.show_my_achievements);
+        btn2.setOnClickListener(this);
+
+        Button btn3 = (Button) findViewById(R.id.show_words);
+        btn3.setOnClickListener(this);
+
+        Button btn4 = (Button) findViewById(R.id.buy_boosters);
+        btn4.setOnClickListener(this);
 
         Profile profile = Profile.getCurrentProfile();
 
@@ -63,6 +69,18 @@ public class ProfileActivity extends AppCompatActivity
         switch (v.getId()) {
             case R.id.show_letters_gathered:
                 i = new Intent(getApplicationContext(), LetterListActivity.class);
+                startActivity(i);
+                break;
+            case R.id.show_my_achievements:
+                i = new Intent(getApplicationContext(), AchievementsActivity.class);
+                startActivity(i);
+                break;
+            case R.id.show_words:
+                i = new Intent(getApplicationContext(), WordsActivity.class);
+                startActivity(i);
+                break;
+            case R.id.buy_boosters:
+                i = new Intent(getApplicationContext(), ShopActivity.class);
                 startActivity(i);
                 break;
             default:

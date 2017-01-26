@@ -9,8 +9,11 @@ import android.support.design.widget.Snackbar;
 import android.text.SpannableStringBuilder;
 import android.text.style.ImageSpan;
 import android.util.Pair;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.grabble.Fragments.GmapFragment;
+import com.grabble.NavActivity;
 import com.grabble.R;
 
 import java.io.BufferedReader;
@@ -43,6 +46,8 @@ public class GameState extends Application {
     private int wordHelpers;
     private int distanceTraveled;
     private String username;
+
+    private RelativeLayout headerContent;
 
     // --- variables for settings ---
     // variables for battery saving mode
@@ -168,6 +173,10 @@ public class GameState extends Application {
 
     // getters for the global variables
 
+    public RelativeLayout getHeaderContent() {
+        return headerContent;
+    }
+
     public boolean getNightMode() {
         return nightMode;
     }
@@ -204,6 +213,7 @@ public class GameState extends Application {
                     showAchievementSnackbar(snackbar, achievement);
                     gems += achievement.getGemReward();
                     tokens += achievement.getTokenReward();
+                    NavActivity.updateContent(this);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -345,6 +355,10 @@ public class GameState extends Application {
     public void setBatterySavingMode(boolean batterySavingMode) {
         this.batterySavingMode = batterySavingMode;
         GmapFragment.setLocationRequestVariables(batterySavingMode);
+    }
+
+    public void setHeaderContent(RelativeLayout ly) {
+        headerContent = ly;
     }
 
     public void setUsername(String username) {

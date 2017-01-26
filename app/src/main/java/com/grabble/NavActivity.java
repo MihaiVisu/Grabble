@@ -1,10 +1,13 @@
 package com.grabble;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.app.FragmentManager;
+import android.text.SpannableStringBuilder;
+import android.text.style.ImageSpan;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.facebook.Profile;
@@ -50,8 +54,9 @@ public class NavActivity extends AppCompatActivity
 
         View headerView = navigationView.getHeaderView(0);
 
-        TextView profileUserName = (TextView) headerView.findViewById(R.id.header_user_name);
-        profileUserName.setText("Hello, " + state.getUsername() + "!");
+        state.setHeaderContent((RelativeLayout) headerView.findViewById(R.id.header_content));
+
+        updateContent(state);
 
         Profile profile = Profile.getCurrentProfile();
 
@@ -61,6 +66,29 @@ public class NavActivity extends AppCompatActivity
         }
         FragmentManager fm = getFragmentManager();
         fm.beginTransaction().replace(R.id.content_frame, new GmapFragment()).commit();
+
+    }
+
+    // static method to update the header content on the head drawer
+    public static void updateContent(GameState state) {
+        TextView headerUsername = (TextView) state.getHeaderContent()
+                .findViewById(R.id.header_user_name);
+        TextView tokensAndGems = (TextView) state.getHeaderContent()
+                .findViewById(R.id.tokens_and_gems);
+        headerUsername.setText("Hello, " + state.getUsername() + "!");
+        SpannableStringBuilder builder = new SpannableStringBuilder();
+        String message = "x" + state.getTokens() + "  ";
+        builder.append(message);
+        Drawable coins = state.getDrawable(R.drawable.coins);
+        coins.setBounds(0,0,50,50);
+        builder.setSpan(new ImageSpan(coins), builder.length()-1, builder.length(), 0);
+        message = " x" + state.getGems() + "  ";
+        builder.append(message);
+        Drawable gems = state.getDrawable(R.drawable.gem);
+        gems.setBounds(0,0,50,50);
+        builder.setSpan(new ImageSpan(gems), builder.length()-1, builder.length(), 0);
+        tokensAndGems.setText(builder);
+
 
     }
 

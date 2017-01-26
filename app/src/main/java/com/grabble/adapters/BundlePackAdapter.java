@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.braintreepayments.api.PaymentRequest;
+import com.grabble.NavActivity;
 import com.grabble.R;
 import com.grabble.customclasses.BundleOffer;
 import com.grabble.customclasses.GameState;
@@ -131,6 +132,7 @@ public class BundlePackAdapter extends RecyclerView.Adapter<BundlePackAdapter.Bu
                                 else {
                                     state.buyBoosters(currentBundleOffer.getQuantity(),
                                             "los", "cash", currentBundleOffer.getTokenPrice());
+                                    NavActivity.updateContent(state);
                                 }
                             }
                         })
@@ -145,6 +147,7 @@ public class BundlePackAdapter extends RecyclerView.Adapter<BundlePackAdapter.Bu
                                 else {
                                     state.buyBoosters(currentBundleOffer.getQuantity(),
                                             "los", "gems", currentBundleOffer.getGemPrice());
+                                    NavActivity.updateContent(state);
                                 }
                             }
                         })
@@ -168,6 +171,7 @@ public class BundlePackAdapter extends RecyclerView.Adapter<BundlePackAdapter.Bu
                         else {
                             state.buyBoosters(currentBundleOffer.getQuantity(),
                                     "helper", "gems", currentBundleOffer.getGemPrice());
+                            NavActivity.updateContent(state);
                         }
                     }
                 })

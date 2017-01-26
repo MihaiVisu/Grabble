@@ -1,15 +1,20 @@
 package com.grabble;
 
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.SwitchPreference;
+import android.support.design.widget.NavigationView;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.vision.text.Text;
 import com.grabble.Fragments.GmapFragment;
 import com.grabble.customclasses.GameState;
 
@@ -67,6 +72,21 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             }
         });
 
+        // configure the display name edit preference
+        displayNameEdit = (EditTextPreference) findPreference("display_name_edit");
+        displayNameEdit.setText(state.getUsername());
+        displayNameEdit.setSummary(state.getUsername());
+        displayNameEdit.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                String newName = newValue.toString();
+                displayNameEdit.setText(newName);
+                displayNameEdit.setSummary(newName);
+                state.setUsername(newName);
+                NavActivity.updateContent(state);
+                return true;
+            }
+        });
     }
 
     /**
