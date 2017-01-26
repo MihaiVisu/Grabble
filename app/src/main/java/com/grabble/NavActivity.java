@@ -3,9 +3,12 @@ package com.grabble;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.app.FragmentManager;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.ShareActionProvider;
 import android.text.SpannableStringBuilder;
 import android.text.style.ImageSpan;
 import android.view.View;
@@ -32,6 +35,7 @@ public class NavActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
 
     private GameState state;
+    private ShareActionProvider mShareActionProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +110,9 @@ public class NavActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.nav, menu);
+        MenuItem item = menu.findItem(R.id.nav_share);
+        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
+
         return true;
     }
 
@@ -127,7 +134,7 @@ public class NavActivity extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
@@ -150,7 +157,11 @@ public class NavActivity extends AppCompatActivity
             i = new Intent(getApplicationContext(), ShopActivity.class);
             startActivity(i);
         } else if (id == R.id.nav_share) {
-
+            i = new Intent();
+            i.setAction(Intent.ACTION_SEND);
+            i.putExtra(Intent.EXTRA_TEXT, "I have a total score of " + state.getTotalScore() + ".");
+            i.setType("text/plain");
+            startActivity(Intent.createChooser(i, "Send To"));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
