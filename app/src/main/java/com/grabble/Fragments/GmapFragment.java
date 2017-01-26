@@ -21,6 +21,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -61,9 +62,9 @@ public class GmapFragment extends Fragment implements
 
     private GoogleApiClient mGoogleApiClient;
     private static Location mLastLocation;
-    private  static Location oldLocation;
+    private static Location oldLocation;
     private static LocationRequest mLocationRequest;
-    private  static GoogleMap mMap;
+    private static GoogleMap mMap;
 
     // circles representing line of sight and grabbing radius
     private static Circle lineOfSight, grabbingRadius;
@@ -93,7 +94,6 @@ public class GmapFragment extends Fragment implements
 
         state = ((GameState) getActivity().getApplicationContext());
         snackbar = Snackbar.make(view, "", Snackbar.LENGTH_SHORT);
-
 
         FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -138,16 +138,19 @@ public class GmapFragment extends Fragment implements
                         multiplyLineOfSightDistance(2); // double the radius
                         setLineOfSightRadiusAndColor(lineOfSightDistance, R.color.bt_red);
                         hideAllMarkers();
+                        state.useLosBooster();
                         updateMarkers(oldLocation, state);
                     } else {
                         snackbar.setText("Booster is already in progress!").show();
                     }
-                }
-                else {
+                } else {
                     snackbar.setText("No boosters left!").show();
                 }
             }
         });
+
+        mLocationRequest = new LocationRequest();
+        setLocationRequestVariables(state.getBatterySavingMode());
 
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this.getActivity())
@@ -221,16 +224,18 @@ public class GmapFragment extends Fragment implements
                 ActivityCompat.checkSelfPermission(this.getActivity(),
                         Manifest.permission.ACCESS_COARSE_LOCATION) !=
                         PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 100);
+//            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+//                    Manifest.permission.ACCESS_COARSE_LOCATION}, 100);
+//            return;
+        } else {
+            mMap.setMyLocationEnabled(true);
         }
-        mMap.setMyLocationEnabled(true);
 
-        ConnectivityManager connMgr = (ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connMgr = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
             new DownloadWebpageTask().execute(getUrl());
-        }
-        else {
+        } else {
             Log.i("No connection available", "No Connection Available");
         }
 
@@ -251,22 +256,22 @@ public class GmapFragment extends Fragment implements
         @Override
         protected void onPostExecute(List<KMLParser.Entry> result) {
 
-                for (KMLParser.Entry entry : result) {
-                    String letterDescription = entry.getDescription();
-                    LatLng coordinates = entry.getCoordinates();
+            for (KMLParser.Entry entry : result) {
+                String letterDescription = entry.getDescription();
+                LatLng coordinates = entry.getCoordinates();
 
-                    Location loc = new Location("Provider");
-                    loc.setLatitude(coordinates.latitude);
-                    loc.setLongitude(coordinates.longitude);
+                Location loc = new Location("Provider");
+                loc.setLatitude(coordinates.latitude);
+                loc.setLongitude(coordinates.longitude);
 
-                    // add new created marker to markers array
-                    Marker marker = mMap.addMarker(new MarkerOptions()
-                            .position(coordinates)
-                            .title(letterDescription));
-                    markers.add(marker);
-                    // set initial visibility of markers to none
-                    marker.setVisible(false);
-                }
+                // add new created marker to markers array
+                Marker marker = mMap.addMarker(new MarkerOptions()
+                        .position(coordinates)
+                        .title(letterDescription));
+                markers.add(marker);
+                // set initial visibility of markers to none
+                marker.setVisible(false);
+            }
         }
 
         private List<KMLParser.Entry> loadXmlFromNetwork(String urlString) throws
@@ -282,8 +287,7 @@ public class GmapFragment extends Fragment implements
                 if (stream != null) {
                     stream.close();
                 }
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
@@ -293,7 +297,7 @@ public class GmapFragment extends Fragment implements
         private InputStream downloadUrl(String myUrl) throws IOException, XmlPullParserException {
 
             URL url = new URL(myUrl);
-            HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setReadTimeout(10000);
             conn.setConnectTimeout(15000);
             conn.setRequestMethod("GET");
@@ -304,52 +308,79 @@ public class GmapFragment extends Fragment implements
         }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[],
+                                           @NonNull int[] grantResults) {
+
+        System.out.print("CALLBACK CALLBACK:  " + requestCode);
+        switch (requestCode) {
+            case 100: {
+
+                System.out.print("GRANTED!!!");
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission granted
+                    try {
+                        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+                        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
+                                mLocationRequest, this);
+                        mMap.setMyLocationEnabled(true);
+                        handleNewLocation();
+                    } catch (SecurityException e) {
+                        e.printStackTrace();
+                    }
+
+                } else {
+                    // permission denied
+                    Toast.makeText(getActivity(), "Permission denied to load location",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
 
     @TargetApi(Build.VERSION_CODES.M)
     private void createLocationRequest() {
 
-        if (ActivityCompat.checkSelfPermission(getActivity(),
+        if (ActivityCompat.checkSelfPermission(this.getActivity(),
                 Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this.getActivity(),
                         Manifest.permission.ACCESS_COARSE_LOCATION) !=
                         PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 100);
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION}, 100);
+        } else {
+
+            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+
         }
-
-        mLocationRequest = new LocationRequest();
-
-        setLocationRequestVariables(state.getBatterySavingMode());
-
-        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
     }
 
     public static void setLocationRequestVariables(boolean batterySavingMode) {
+
         // set variables for battery saving mode
         int locationAccuracyMode, interval;
 
         if (batterySavingMode) {
             locationAccuracyMode = LocationRequest.PRIORITY_LOW_POWER;
             interval = 20;
-        }
-        else {
+        } else {
             locationAccuracyMode = LocationRequest.PRIORITY_HIGH_ACCURACY;
             interval = 10;
         }
-        mLocationRequest.setInterval(interval*1000);
+        mLocationRequest.setInterval(interval * 1000);
         mLocationRequest.setFastestInterval(1000);
         mLocationRequest.setPriority(locationAccuracyMode);
     }
 
-    @TargetApi(Build.VERSION_CODES.M)
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-
-        if (ActivityCompat.checkSelfPermission(this.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 100);
-        }
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        createLocationRequest();
-        if (mLastLocation!= null && mMap != null && lineOfSight == null && grabbingRadius == null) {
+    private void handleNewLocation() {
+        if (mLastLocation != null && mMap != null && lineOfSight == null && grabbingRadius == null) {
             lineOfSight = mMap.addCircle(new CircleOptions()
                     .center(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()))
                     .radius(lineOfSightDistance)
@@ -364,6 +395,13 @@ public class GmapFragment extends Fragment implements
                     new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude())
             ));
         }
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+        createLocationRequest();
+        handleNewLocation();
     }
 
     @Override
@@ -416,9 +454,6 @@ public class GmapFragment extends Fragment implements
         return oldLocation;
     }
 
-    public static LocationRequest getLocationRequest() {
-        return mLocationRequest;
-    }
 
     @Override
     public void onLocationChanged(Location location) {
