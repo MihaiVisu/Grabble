@@ -21,6 +21,7 @@ public class AchievementsAdapter extends
         RecyclerView.Adapter<AchievementsAdapter.AchievementViewHolder> {
 
     private ArrayList<Achievement> achievements;
+    private int index = 0;
 
     public static class AchievementViewHolder extends RecyclerView.ViewHolder {
         CardView cv;
@@ -28,6 +29,7 @@ public class AchievementsAdapter extends
         TextView rewardText;
         ImageView achievementImg, achievedImg;
         GameState state;
+        static int index = 0;
 
         AchievementViewHolder(View itemView, GameState state) {
             super(itemView);
@@ -37,6 +39,7 @@ public class AchievementsAdapter extends
             rewardText = (TextView) itemView.findViewById(R.id.achievement_reward);
             achievementImg = (ImageView) itemView.findViewById(R.id.achievement_img);
             achievedImg = (ImageView) itemView.findViewById(R.id.achieved);
+            itemView.setId(index);
         }
     }
 

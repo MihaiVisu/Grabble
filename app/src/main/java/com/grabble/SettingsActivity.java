@@ -108,5 +108,12 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         }
         return false;
     }
+
+    @Override
+    public void onStop() {
+        state.activityStopped();
+        super.onStop();
+    }
+
 }
 

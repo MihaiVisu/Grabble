@@ -80,6 +80,9 @@ public class GameState extends Application {
     private ArrayList<Pair<String, Integer>> sortedWordsList;
     private SharedPreferences prefs;
     private ArrayList<Achievement> achievements;
+    // array representing the states of all the achievements
+    // which will be written to internal storage to preserve the state
+    private ArrayList<Boolean> achievementState;
 
     // constructor
     @SuppressWarnings("unchecked")
@@ -111,6 +114,8 @@ public class GameState extends Application {
 
             wordsList = (HashSet<String>) ois.readObject();
 
+            achievementState = (ArrayList<Boolean>) ois.readObject();
+
 
             ois.close();
         }
@@ -129,6 +134,27 @@ public class GameState extends Application {
             }
             if (wordsList == null) {
                 wordsList = new HashSet<>();
+            }
+            if (achievementState == null) {
+                achievementState = new ArrayList<>();
+            }
+        }
+
+        // if the list of words hasn't been initialized previously in internal storage
+        // initialize it from the grabble.txt raw file and add it to the set
+        if (wordsList.isEmpty()) {
+            try {
+                InputStream iograbble = getApplicationContext().getResources().openRawResource(
+                        getResources().getIdentifier("grabble", "raw", getPackageName()));
+                BufferedReader buffer = new BufferedReader(new InputStreamReader(iograbble));
+                String line;
+                while ((line = buffer.readLine()) != null) {
+                    wordsList.add(line);
+                }
+                // close the buffer
+                buffer.close();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
 
@@ -149,28 +175,6 @@ public class GameState extends Application {
                     }
                 }
             });
-        }
-
-        for(char letter = 'a'; letter <= 'z'; letter++) {
-            lettersGrabbed.put(String.valueOf(letter), 10);
-        }
-
-        // if the list of words hasn't been initialized previously in internal storage
-        // initialize it from the grabble.txt raw file and add it to the set
-        if (wordsList.isEmpty()) {
-            try {
-                InputStream iograbble = getApplicationContext().getResources().openRawResource(
-                        getResources().getIdentifier("grabble", "raw", getPackageName()));
-                BufferedReader buffer = new BufferedReader(new InputStreamReader(iograbble));
-                String line;
-                while ((line = buffer.readLine()) != null) {
-                    wordsList.add(line);
-                }
-                // close the buffer
-                buffer.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
 
     }
@@ -208,15 +212,16 @@ public class GameState extends Application {
     // check milestones of all achievements and update the achieved state
     // if new achievement is reached, show a snackbar with a message
     public void checkMilestones(Snackbar snackbar) {
-        for (Achievement achievement : achievements) {
+        for (int i = 0; i < achievements.size(); i++) {
             try {
-                boolean previousState = achievement.getAchieved();
-                achievement.checkMilestone();
+                boolean previousState = achievementState.get(i);
+                achievements.get(i).checkMilestone();
                 // if achievement just unlocked
-                if (achievement.getAchieved() && !previousState) {
-                    showAchievementSnackbar(snackbar, achievement);
-                    gems += achievement.getGemReward();
-                    tokens += achievement.getTokenReward();
+                if (achievements.get(i).getAchieved() && !previousState) {
+                    showAchievementSnackbar(snackbar, achievements.get(i));
+                    achievementState.set(i, true);
+                    gems += achievements.get(i).getGemReward();
+                    tokens += achievements.get(i).getTokenReward();
                     NavActivity.updateContent(this);
                 }
             } catch (Exception e) {
@@ -247,25 +252,22 @@ public class GameState extends Application {
                             return wordsCreated.size() >= 1;
                         }
                     }));
-            achievements.add(new Achievement("Collect 50 letters", 50, 1, R.drawable.first_letters,
+            achievements.add(new Achievement("Collect 200 letters", 50, 1, R.drawable.first_letters,
                     new Callable<Boolean>() {
                         @Override
                         public Boolean call() throws Exception {
-                            return lettersGrabbed.size() >= 10;
+                            int sum = 0;
+                            for(String key : lettersGrabbed.keySet()) {
+                                sum += lettersGrabbed.get(key);
+                            }
+                            return sum >= 200;
                         }
                     }));
-            achievements.add(new Achievement("Travel 500m", 100, 2, R.drawable.road,
+            achievements.add(new Achievement("Travel 1000m", 100, 2, R.drawable.road,
                     new Callable<Boolean>() {
                         @Override
                         public Boolean call() throws Exception {
-                            return distanceTraveled >= 500;
-                        }
-                    }));
-            achievements.add(new Achievement("Travel 1500m", 250, 5, R.drawable.road_map,
-                    new Callable<Boolean>() {
-                        @Override
-                        public Boolean call() throws Exception {
-                            return distanceTraveled >= 1500;
+                            return distanceTraveled >= 1000;
                         }
                     }));
             achievements.add(new Achievement("Travel 5000m", 400, 8, R.drawable.worldwide,
@@ -282,20 +284,6 @@ public class GameState extends Application {
                             return totalScore >= 1500;
                         }
                     }));
-            achievements.add(new Achievement("Score 3000 points", 200, 4, R.drawable.trophy,
-                    new Callable<Boolean>() {
-                        @Override
-                        public Boolean call() throws Exception {
-                            return totalScore >= 1500;
-                        }
-                    }));
-            achievements.add(new Achievement("Collect 200 letters", 100, 2, R.drawable.letters,
-                    new Callable<Boolean>() {
-                        @Override
-                        public Boolean call() throws Exception {
-                            return lettersGrabbed.size() >= 100;
-                        }
-                    }));
             achievements.add(new Achievement("Create 50 words", 400, 8, R.drawable.book,
                     new Callable<Boolean>() {
                         @Override
@@ -303,6 +291,31 @@ public class GameState extends Application {
                             return wordsCreated.size() >= 50;
                         }
                     }));
+            achievements.add(new Achievement("Score 3000 points", 300, 6, R.drawable.trophy,
+                    new Callable<Boolean>() {
+                        @Override
+                        public Boolean call() throws Exception {
+                            return totalScore >= 3000;
+                        }
+                    }));
+            achievements.add(new Achievement("Collect 400 letters", 100, 2, R.drawable.letters,
+                    new Callable<Boolean>() {
+                        @Override
+                        public Boolean call() throws Exception {
+                            int sum = 0;
+                            for(String key : lettersGrabbed.keySet()) {
+                                sum += lettersGrabbed.get(key);
+                            }
+                            return sum >= 400;
+                        }
+                    }));
+        }
+        if (achievementState == null || achievementState.size() == 0) {
+            // initialize array of achievement state
+            achievementState = new ArrayList<>(achievements.size());
+            for (int i = 0; i < achievements.size(); i++) {
+                achievementState.add(false);
+            }
         }
     }
 
@@ -436,6 +449,7 @@ public class GameState extends Application {
     }
 
     public void addNewLetter(String letter) {
+        letter = letter.toLowerCase();
         Integer freqOfLetter = lettersGrabbed.get(letter);
         if (freqOfLetter == null) {
             lettersGrabbed.put(letter, 1);
@@ -545,6 +559,7 @@ public class GameState extends Application {
             oout.writeObject(wordsCreated);
             oout.writeObject(markersGrabbed);
             oout.writeObject(wordsList);
+            oout.writeObject(achievementState);
 
             oout.close();
         }

@@ -15,12 +15,14 @@ import com.grabble.customclasses.GameState;
 public class ProfileActivity extends AppCompatActivity
         implements View.OnClickListener{
 
+    private GameState state;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        GameState state = (GameState) getApplicationContext();
+        state = (GameState) getApplicationContext();
 
         Button btn1 = (Button) findViewById(R.id.show_letters_gathered);
         btn1.setOnClickListener(this);
@@ -89,6 +91,12 @@ public class ProfileActivity extends AppCompatActivity
     }
 
     @Override
+    public void onStop() {
+        state.activityStopped();
+        super.onStop();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             onBackPressed();
@@ -96,4 +104,5 @@ public class ProfileActivity extends AppCompatActivity
         }
         return false;
     }
+
 }

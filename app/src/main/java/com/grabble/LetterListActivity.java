@@ -34,10 +34,13 @@ public class LetterListActivity extends AppCompatActivity {
         String[] scores = new String[lettersGrabbed.size()];
         int[] left = new int[lettersGrabbed.size()];
 
-        for (String letter : lettersGrabbed.keySet()) {
-            letters[counter] = letter.toLowerCase();
-            scores[counter] = "Score: " + state.getLetterScore(letter.toLowerCase());
-            left[counter++] = lettersGrabbed.get(letter.toLowerCase());
+        for (char letter = 'a'; letter <= 'z'; letter++) {
+            String let = String.valueOf(letter);
+            if (state.getLettersGrabbed().containsKey(let)) {
+                letters[counter] = let;
+                scores[counter] = "Score: " + state.getLetterScore(let);
+                left[counter++] = lettersGrabbed.get(let);
+            }
         }
 
         String[] leftTags = new String[left.length];
@@ -63,5 +66,11 @@ public class LetterListActivity extends AppCompatActivity {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void onStop() {
+        state.activityStopped();
+        super.onStop();
     }
 }

@@ -159,4 +159,10 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                 break;
         }
     }
+
+    @Override
+    public void onStop() {
+        state.activityStopped();
+        super.onStop();
+    }
 }

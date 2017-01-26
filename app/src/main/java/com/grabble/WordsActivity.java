@@ -236,6 +236,7 @@ public class WordsActivity extends AppCompatActivity  implements View.OnClickLis
         if(state.getWordsList().contains(typedWord)) {
             if (!state.getWordsCreated().containsKey(typedWord)) {
                 addNewWordToList(typedWord);
+                NavActivity.updateContent(state);
             }
             else {
                 toast.setText("Word already collected!");

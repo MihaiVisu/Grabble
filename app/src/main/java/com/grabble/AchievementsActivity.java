@@ -41,6 +41,11 @@ public class AchievementsActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onStop() {
+        state.activityStopped();
+        super.onStop();
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

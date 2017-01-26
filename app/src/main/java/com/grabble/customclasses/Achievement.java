@@ -19,8 +19,8 @@ public class Achievement {
         this.tokenReward = tokenReward;
         this.gemReward = gemReward;
         this.imgId = imgId;
-        this.achieved = false;
         this.callable = callable;
+        this.achieved = false;
     }
 
     public boolean getAchieved() {

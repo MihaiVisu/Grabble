@@ -35,7 +35,6 @@ public class NavActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
 
     private GameState state;
-    private ShareActionProvider mShareActionProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,11 +106,15 @@ public class NavActivity extends AppCompatActivity
     }
 
     @Override
+    public void onStop() {
+        state.activityStopped();
+        super.onStop();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.nav, menu);
-        MenuItem item = menu.findItem(R.id.nav_share);
-        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
 
         return true;
     }
