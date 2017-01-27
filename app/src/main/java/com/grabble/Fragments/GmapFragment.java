@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -49,9 +50,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import mbanje.kurt.fabbutton.FabButton;
 
@@ -177,14 +181,14 @@ public class GmapFragment extends Fragment implements
 
     private String getUrl() {
 
-        String[] days = {
-                "monday", "tuesday", "wednesday", "thursday",
-                "friday", "saturday", "sunday"
-        };
         Calendar c = Calendar.getInstance();
+        Date date = c.getTime();
+        String day = new SimpleDateFormat("EEEE", Locale.ENGLISH).format(date.getTime());
+
+        Log.d("DAY OF WEEK", day);
 
         return "http://www.inf.ed.ac.uk/teaching/courses/selp/coursework/" +
-                days[c.get(Calendar.DAY_OF_WEEK) - 1] + ".kml";
+                day.toLowerCase() + ".kml";
     }
 
     public static void setLineOfSightRadiusAndColor(int radius, int color) {
