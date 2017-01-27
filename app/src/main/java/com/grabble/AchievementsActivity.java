@@ -18,6 +18,9 @@ import java.util.ArrayList;
 import java.util.concurrent.Callable;
 
 
+/**
+ * Activity representing the achievements list
+ */
 public class AchievementsActivity extends AppCompatActivity {
 
     private RecyclerView rv;
@@ -28,15 +31,20 @@ public class AchievementsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_achievements);
 
+        // set the state object
         state = (GameState)getApplicationContext();
 
+        // get the recycler view
         rv = (RecyclerView) findViewById(R.id.achievements_list);
 
+        // set fixed size for improved performance
         rv.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);
 
+        // set layout manager to make it look like a list view
         rv.setLayoutManager(llm);
 
+        // set the adapter on the achievements list
         rv.setAdapter(new AchievementsAdapter(state.getAchievements()));
 
     }
@@ -47,6 +55,7 @@ public class AchievementsActivity extends AppCompatActivity {
         super.onStop();
     }
 
+    // override when pressing the back button
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {

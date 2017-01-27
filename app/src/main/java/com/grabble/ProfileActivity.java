@@ -12,6 +12,9 @@ import com.facebook.Profile;
 import com.facebook.login.widget.ProfilePictureView;
 import com.grabble.customclasses.GameState;
 
+/**
+ * Activity of profile page
+ */
 public class ProfileActivity extends AppCompatActivity
         implements View.OnClickListener{
 
@@ -22,8 +25,10 @@ public class ProfileActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        // set the state object
         state = (GameState) getApplicationContext();
 
+        // initialize buttons and set listeners
         Button btn1 = (Button) findViewById(R.id.show_letters_gathered);
         btn1.setOnClickListener(this);
 
@@ -36,6 +41,7 @@ public class ProfileActivity extends AppCompatActivity
         Button btn4 = (Button) findViewById(R.id.buy_boosters);
         btn4.setOnClickListener(this);
 
+        // get facebook profile picture if logged in with facebook
         Profile profile = Profile.getCurrentProfile();
 
         if (profile != null) {
@@ -43,6 +49,7 @@ public class ProfileActivity extends AppCompatActivity
             profilePictureView.setProfileId(profile.getId());
         }
 
+        // set text views with user details
         TextView profileUserName = (TextView) findViewById(R.id.profile_user_name);
         profileUserName.setText(state.getUsername());
 
@@ -65,22 +72,27 @@ public class ProfileActivity extends AppCompatActivity
         profileScore.setText(String.valueOf(state.getTotalScore()));
     }
 
+    // set listener for buttons
     @Override
     public void onClick(View v) {
         Intent i;
         switch (v.getId()) {
+            // if letter list activity
             case R.id.show_letters_gathered:
                 i = new Intent(getApplicationContext(), LetterListActivity.class);
                 startActivity(i);
                 break;
+            // if achievements activity
             case R.id.show_my_achievements:
                 i = new Intent(getApplicationContext(), AchievementsActivity.class);
                 startActivity(i);
                 break;
+            // if words activity
             case R.id.show_words:
                 i = new Intent(getApplicationContext(), WordsActivity.class);
                 startActivity(i);
                 break;
+            // if shop activity
             case R.id.buy_boosters:
                 i = new Intent(getApplicationContext(), ShopActivity.class);
                 startActivity(i);
@@ -96,6 +108,7 @@ public class ProfileActivity extends AppCompatActivity
         super.onStop();
     }
 
+    // override when pressing back on action bar
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {

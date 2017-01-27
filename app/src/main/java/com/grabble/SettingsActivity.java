@@ -45,6 +45,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         // but not worth using general fragments as we have only one section
         addPreferencesFromResource(R.xml.pref_general);
 
+        // set state object
         state = (GameState) getApplicationContext();
 
         // configure the night mode switch
@@ -53,6 +54,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 boolean val = (boolean) newValue;
+                // set map style in terms of value of the switch
                 int mapStyle = (val) ? R.raw.night_mode_map : R.raw.standard_map;
                 state.setNightMode(val);
                 GmapFragment.getMap().setMapStyle(MapStyleOptions.loadRawResourceStyle(getApplicationContext(),
@@ -100,6 +102,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         }
     }
 
+    // override action when prassing back button in action bar
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {

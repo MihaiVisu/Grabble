@@ -49,30 +49,38 @@ public class WordsActivity extends AppCompatActivity  implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_words);
 
+        // set the state object
         state = (GameState) getApplicationContext();
 
+        // set the table layout
         tl = (TableLayout) findViewById(R.id.words_table);
 
+        // set the toast for messages
         toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
 
+        // set the snackbar for messages
         snackbar = Snackbar.make(findViewById(R.id.activity_words), "",
                 Snackbar.LENGTH_SHORT);
 
 
 
+        // set an input filter for edit text inputs
         InputFilter filter = new InputFilter() {
             @Override
             public CharSequence filter(CharSequence source, int start, int end,
                                        Spanned dest, int dstart, int dend) {
 
+                // get the typed characters in a certain edit text
                 String typedChar = source.toString().toLowerCase();
 
+                // if not letter then go out
                 if (!Character.isLetter(typedChar.charAt(0)) && typedChar.length() != 0) {
                     toast.setText("You must type a letter!");
                     toast.show();
                     return "";
                 }
 
+                // if we don't have that letter at all go out
                 if(!state.getLettersGrabbed().containsKey(typedChar) && typedChar.length() != 0) {
                     toast.setText("Letter " + typedChar.charAt(0) + " is not collected!");
                     toast.show();
@@ -82,6 +90,7 @@ public class WordsActivity extends AppCompatActivity  implements View.OnClickLis
                 // check letter frequency
                 updateletterFrequency();
                 if (typedChar.length() > 0) {
+                    // if no letters of that type left go out
                     if (typedLetters[typedChar.charAt(0) - 'a']+1 > state.getLettersGrabbed()
                             .get(typedChar)) {
                         toast.setText("You don't have any " + typedChar.toUpperCase() + " left!");
@@ -101,6 +110,7 @@ public class WordsActivity extends AppCompatActivity  implements View.OnClickLis
 
         System.out.println(state.getWordsCreated().size());
 
+        // initialize buttons and set listeners
         letterListButton = (Button) findViewById(R.id.button3);
         letterListButton.setOnClickListener(this);
 
@@ -115,12 +125,15 @@ public class WordsActivity extends AppCompatActivity  implements View.OnClickLis
 
         configureTextFilters(letterBoxesLayout, filter);
 
+        // if all edit text inputs have letters in them
         if(isWordFormFull()) {
+            // then enable the create word button
             createWordButton.setEnabled(true);
         }
 
     }
 
+    // function to update typed letters frequency based on what we have typed in
     private void updateletterFrequency() {
         Arrays.fill(typedLetters, 0);
         for (EditText letterBox : letterBoxes) {
@@ -130,10 +143,13 @@ public class WordsActivity extends AppCompatActivity  implements View.OnClickLis
         }
     }
 
+    // configure text filters for the edit text forms
     private void configureTextFilters(LinearLayout letterBoxesLayout, InputFilter filter) {
         for (int i = 0; i < letterBoxesLayout.getChildCount(); i++) {
             letterBoxes[i] = (EditText) letterBoxesLayout.getChildAt(i);
+            // set the filter
             letterBoxes[i].setFilters(new InputFilter[] {filter, new InputFilter.LengthFilter(1)});
+            // add the text changed listeners after applying the filter
             letterBoxes[i].addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -171,6 +187,7 @@ public class WordsActivity extends AppCompatActivity  implements View.OnClickLis
         }
     }
 
+    // check if we have completed the word form with all 7 edit texts
     private boolean isWordFormFull() {
         if (letterBoxes.length == 0) {
             return false;
@@ -183,6 +200,7 @@ public class WordsActivity extends AppCompatActivity  implements View.OnClickLis
         return true;
     }
 
+    // get typed word out of the letter boxes
     private String getTypedWord() {
         String word = "";
         for(EditText letterBox : letterBoxes) {
@@ -191,6 +209,7 @@ public class WordsActivity extends AppCompatActivity  implements View.OnClickLis
         return word;
     }
 
+    // initialize the click listeners for the buttons
     @Override
     public void onClick(View v) {
         Intent i;
@@ -279,6 +298,7 @@ public class WordsActivity extends AppCompatActivity  implements View.OnClickLis
         }
     }
 
+    // add new word to list of words created in state
     private void addNewWordToList(String typedWord) {
         state.addNewWord(typedWord);
         for(int idx = 0; idx < typedWord.length(); idx++) {
@@ -310,6 +330,7 @@ public class WordsActivity extends AppCompatActivity  implements View.OnClickLis
         tl.addView(tr);
     }
 
+    // override when pressing back button in the action bar
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {

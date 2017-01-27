@@ -18,12 +18,20 @@ import java.util.ArrayList;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
+/**
+ * Adapter class for the achievements list
+ * implementing a recycler view with a LinearLayoutManager
+ * to make it look like a list view
+ */
 public class AchievementsAdapter extends
         RecyclerView.Adapter<AchievementsAdapter.AchievementViewHolder> {
 
     private ArrayList<Achievement> achievements;
     private int index = 0;
 
+    /**
+     * implement the achievement view holder for the recycler view item
+     */
     public static class AchievementViewHolder extends RecyclerView.ViewHolder {
         CardView cv;
         TextView text;
@@ -31,6 +39,7 @@ public class AchievementsAdapter extends
         ImageView achievementImg, achievedImg;
         GameState state;
 
+        // constructor for the holder
         AchievementViewHolder(View itemView, GameState state) {
             super(itemView);
             this.state = state;
@@ -42,6 +51,7 @@ public class AchievementsAdapter extends
         }
     }
 
+    // constructor for the adapter given the list of achievements
     public AchievementsAdapter(ArrayList<Achievement> achievements) {
         this.achievements = achievements;
     }
@@ -57,6 +67,8 @@ public class AchievementsAdapter extends
         return new AchievementViewHolder(v, (GameState) v.getContext().getApplicationContext());
     }
 
+    // override when holder is binded
+    // populate the item with content from the dataset (list of achievements)
     @Override
     public void onBindViewHolder(AchievementViewHolder holder, int position) {
         Achievement currentAchievement = achievements.get(position);
@@ -71,6 +83,7 @@ public class AchievementsAdapter extends
         }
     }
 
+    // get number of items in the adapter
     @Override
     public int getItemCount() {
         return achievements.size();

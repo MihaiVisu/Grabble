@@ -28,6 +28,9 @@ import com.grabble.customclasses.GameState;
 
 import java.util.ArrayList;
 
+/**
+ * Shop activity class
+ */
 public class ShopActivity extends AppCompatActivity {
 
     /**
@@ -51,10 +54,9 @@ public class ShopActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shop);
 
+        // get the state variable
         state = (GameState) getApplicationContext();
 
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -63,6 +65,7 @@ public class ShopActivity extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
+        // get the tab layout
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
@@ -123,7 +126,8 @@ public class ShopActivity extends AppCompatActivity {
     }
 
     /**
-     * A placeholder fragment containing a simple view.
+     * A placeholder fragment containing a base shop fragment
+     * which changes its values based on the section we are in
      */
     public static class BaseShopFragment extends Fragment {
         /**
@@ -132,24 +136,30 @@ public class ShopActivity extends AppCompatActivity {
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
 
+        // initialize the recycler view and the bundle offers list
         private RecyclerView rv;
         private static ArrayList<BundleOffer> bundleOffers;
 
+        // method to initialize bundle offers in terms of the section number
+        // we are in
         public static void initializeBundleOffers(int sectionNum) {
             bundleOffers = new ArrayList<>();
             switch (sectionNum) {
+                // if we are in section one
                 case 0:
                     bundleOffers.add(new BundleOffer(1, R.drawable.los, 200, 5, 0));
                     bundleOffers.add(new BundleOffer(2, R.drawable.los, 390, 9, 0));
                     bundleOffers.add(new BundleOffer(4, R.drawable.los, 770, 17, 0));
                     bundleOffers.add(new BundleOffer(8, R.drawable.los, 1530, 33, 0));
                     break;
+                // if we are in section 2
                 case 1:
                     bundleOffers.add(new BundleOffer(1, R.drawable.helper, 0, 8, 0));
                     bundleOffers.add(new BundleOffer(2, R.drawable.helper, 0, 15, 0));
                     bundleOffers.add(new BundleOffer(4, R.drawable.helper, 0, 29, 0));
                     bundleOffers.add(new BundleOffer(8, R.drawable.helper, 0, 57, 0));
                     break;
+                // if we are in section 3
                 case 2:
                     bundleOffers.add(new BundleOffer(5, R.drawable.gem, 0, 0, 0.99));
                     bundleOffers.add(new BundleOffer(10, R.drawable.gem, 0, 0, 1.89));
@@ -170,15 +180,18 @@ public class ShopActivity extends AppCompatActivity {
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
             fragment.setArguments(args);
-            return fragment;
+            return fragment; // return fragment in terms of section number
         }
 
 
+
+        // what happens when fragment is created
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_shop, container, false);
 
+            // initialize the recycler view
             rv = (RecyclerView) rootView.findViewById(R.id.rv);
 
             rv.setHasFixedSize(true); // fixed size to improve performance
@@ -186,8 +199,10 @@ public class ShopActivity extends AppCompatActivity {
                     .getApplicationContext());
             rv.setLayoutManager(llm);
 
+            // initialize the bundle offers before setting the adapter
             initializeBundleOffers(getArguments().getInt(ARG_SECTION_NUMBER)-1);
 
+            // set adapter with requested parameters
             rv.setAdapter(new BundlePackAdapter(bundleOffers,
                     Toast.makeText(getActivity().getApplicationContext(), "message",
                             Toast.LENGTH_SHORT), getActivity()));
@@ -206,17 +221,21 @@ public class ShopActivity extends AppCompatActivity {
             super(fm);
         }
 
+        // function which gets the right fragment based on the section number / position
+        // given as parameter
         @Override
         public Fragment getItem(int position) {
             return BaseShopFragment.newInstance(position + 1);
         }
 
+        // get total number of fragments
         @Override
         public int getCount() {
             // Show 3 total pages.
             return 3;
         }
 
+        // get titles of fragments
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {

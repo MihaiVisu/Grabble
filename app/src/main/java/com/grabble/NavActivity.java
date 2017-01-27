@@ -31,6 +31,11 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.grabble.Fragments.GmapFragment;
 import com.grabble.customclasses.GameState;
 
+
+/**
+ * Navigation activity which contains a navigation drawer
+ * and the map fragment inside it
+ */
 public class NavActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
 
@@ -40,33 +45,39 @@ public class NavActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // set the state object
         state = (GameState) getApplicationContext();
 
+        // get action toolbar
         setContentView(R.layout.activity_nav);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // get the drawer layout object
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+        // get navigation view to update the header of the drawer
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         View headerView = navigationView.getHeaderView(0);
 
         state.setHeaderContent((RelativeLayout) headerView.findViewById(R.id.header_content));
-
+        // update content of the state
         updateContent(state);
 
+        // update profile picture if logged in with facebook
         Profile profile = Profile.getCurrentProfile();
 
         if (profile != null) {
             ProfilePictureView profilePictureView = (ProfilePictureView) headerView.findViewById(R.id.imageView);
             profilePictureView.setProfileId(profile.getId());
         }
+        // initialize the map fragment
         FragmentManager fm = getFragmentManager();
         fm.beginTransaction().replace(R.id.content_frame, new GmapFragment()).commit();
 
@@ -74,19 +85,25 @@ public class NavActivity extends AppCompatActivity
 
     // static method to update the header content on the head drawer
     public static void updateContent(GameState state) {
+        // update username
         TextView headerUsername = (TextView) state.getHeaderContent()
                 .findViewById(R.id.header_user_name);
+        // update tokens and gems
         TextView tokensAndGems = (TextView) state.getHeaderContent()
                 .findViewById(R.id.tokens_and_gems);
         headerUsername.setText("Hello, " + state.getUsername() + "!");
+        // initialize a spannable string builder in order to put
+        // icons of gems and coins within text
         SpannableStringBuilder builder = new SpannableStringBuilder();
         String message = "x" + state.getTokens() + "  ";
         builder.append(message);
+        // set the coins icon and content
         Drawable coins = state.getDrawable(R.drawable.coins);
         coins.setBounds(0,0,50,50);
         builder.setSpan(new ImageSpan(coins), builder.length()-1, builder.length(), 0);
         message = " x" + state.getGems() + "  ";
         builder.append(message);
+        // set the gems icon and content
         Drawable gems = state.getDrawable(R.drawable.gem);
         gems.setBounds(0,0,50,50);
         builder.setSpan(new ImageSpan(gems), builder.length()-1, builder.length(), 0);
@@ -95,6 +112,7 @@ public class NavActivity extends AppCompatActivity
 
     }
 
+    // override when pressing back button
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -135,7 +153,8 @@ public class NavActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
+    // listeners on drawer menu item selected
+    @SuppressWarnings("StatementWithEmptyBody") // suppress some annoying warnings
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
@@ -143,27 +162,28 @@ public class NavActivity extends AppCompatActivity
 
         Intent i;
 
+        // if map item do nothing
         if (id == R.id.nav_map) {
-        } else if (id == R.id.nav_profile) {
+        } else if (id == R.id.nav_profile) { // if profile item
             i = new Intent(getApplicationContext(), ProfileActivity.class);
             startActivity(i);
-        } else if (id == R.id.nav_achievements) {
+        } else if (id == R.id.nav_achievements) { // if achievements item
             i = new Intent(getApplicationContext(), AchievementsActivity.class);
             startActivity(i);
-        } else if (id == R.id.letters_list) {
+        } else if (id == R.id.letters_list) { // if letter list item
             i = new Intent(getApplicationContext(), LetterListActivity.class);
             startActivity(i);
-        } else if (id == R.id.words_list) {
+        } else if (id == R.id.words_list) { // if words list item
             i = new Intent(getApplicationContext(), WordsActivity.class);
             startActivity(i);
-        } else if (id == R.id.nav_shop) {
+        } else if (id == R.id.nav_shop) { // if shop item
             i = new Intent(getApplicationContext(), ShopActivity.class);
             startActivity(i);
-        } else if (id == R.id.nav_share) {
-            i = new Intent();
+        } else if (id == R.id.nav_share) { // if share item
+            i = new Intent(); // create an intent to share score via installed apps
             i.setAction(Intent.ACTION_SEND);
             i.putExtra(Intent.EXTRA_TEXT, "I have a total score of " + state.getTotalScore() +
-                    "on Grabble.");
+                    " on Grabble.");
             i.setType("text/plain");
             startActivity(Intent.createChooser(i, "Send To"));
         }

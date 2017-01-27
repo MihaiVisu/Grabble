@@ -31,6 +31,9 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 
+/**
+ * Main activity representing the intro activity at the same time
+ */
 public class MainActivity extends AppCompatActivity implements OnClickListener {
 
     private Button btn1, btn2;
@@ -48,34 +51,42 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
         context = getApplicationContext();
 
+        // initialize the facebook api
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
 
         setContentView(R.layout.activity_main);
 
+        // set the state variable
         state = (GameState)context;
         // initialize the achievements in the main activity
         state.initializeAchievements();
 
+        // set listeners to buttons
         btn1 = (Button) findViewById(R.id.button1);
         btn1.setOnClickListener(this);
 
         btn2 = (Button) findViewById(R.id.button2);
         btn2.setOnClickListener(this);
 
+        // get callback manager for facebook login button
         callbackManager = CallbackManager.Factory.create();
         fbLogin = (LoginButton) findViewById(R.id.login_button);
 
         fbLogin.setReadPermissions(Arrays.asList(
                 "public_profile", "email"));
 
+        // implement the callback
         fbLogin.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
 
+                // get graph request from facebok
                 GraphRequest request = GraphRequest.newMeRequest(
                         loginResult.getAccessToken(),
                         new GraphRequest.GraphJSONObjectCallback() {
+
+                            // get json data from facebook
                             @Override
                             public void onCompleted(JSONObject object, GraphResponse response) {
                                 try {
@@ -110,12 +121,16 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
             // enable the button by default if we have a username already
             btn1.setEnabled(true);
         }
+
+        // set listener for edit text
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
             }
 
+            // set cases when changing the edit text in the intro activity
+            // for the username
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() != 0 && !btn1.isEnabled()) {
@@ -133,22 +148,26 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         });
     }
 
+    // set on activity result for facebook call result
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
+    // implement on click listener for buttons
     @Override
     public void onClick(View v) {
         Intent i;
         switch(v.getId()) {
+            // if the buttons which goes to the map activity
             case R.id.button1:
                 // set username of the game state
                 state.setUsername(editText.getText().toString());
                 i = new Intent(context, NavActivity.class);
                 startActivity(i);
                 break;
+            // if the button which goes to instructions activity
             case R.id.button2:
                 i = new Intent(context, InstructionsActivity.class);
                 startActivity(i);
