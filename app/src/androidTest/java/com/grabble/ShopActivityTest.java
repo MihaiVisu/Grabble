@@ -10,7 +10,6 @@ import org.hamcrest.Description;
 import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-import org.junit.After;
 import org.junit.runner.RunWith;
 
 
@@ -29,6 +28,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.pressBack;
@@ -47,7 +47,7 @@ import static org.hamcrest.core.IsNot.not;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class WordsActivityTest {
+public class ShopActivityTest {
 
     private GameState state;
 
@@ -82,8 +82,8 @@ public class WordsActivityTest {
     }
 
     @Rule
-    public ActivityTestRule<WordsActivity> mActivityRule = new ActivityTestRule<>
-            (WordsActivity.class);
+    public ActivityTestRule<ShopActivity> mActivityRule = new ActivityTestRule<>
+            (ShopActivity.class);
 
     @Before
     public void getState() {
@@ -91,37 +91,9 @@ public class WordsActivityTest {
     }
 
     @Test
-    public void goToLetterList() {
-        onView(withId(R.id.button3)).perform(click());
-        onView(allOf(withId(R.id.letter_list), isDisplayed()));
+    public void attemptToBuyBooster() {
+        onView(allOf(withId(R.id.cv), FirstViewMatcher.firstView())).perform(click());
+        onView(allOf(withText("Choose Currency"), isDisplayed()));
     }
 
-    @Test
-    public void typeFirstCharacter() {
-        onView(allOf(withHint("A"), FirstViewMatcher.firstView()))
-                .perform(typeText("2"));
-        onView(withText("You must type a letter!")).inRoot(withDecorView(not(is(mActivityRule
-                .getActivity().getWindow().getDecorView()))))
-                .check(matches(isDisplayed()));
-    }
-
-    // simulate usage of a word helper supposing we have letters
-    @Test
-    public void useWordHelper() {
-        state.setWordHelpers(1);
-        state.addNewLetter("b");
-        state.addNewLetter("u");
-        state.addNewLetter("z");
-        state.addNewLetter("z");
-        state.addNewLetter("w");
-        state.addNewLetter("i");
-        state.addNewLetter("g");
-        onView(withId(R.id.get_suggestion_button)).perform(click());
-        onView(allOf(withText("buzzwig"), isDisplayed()));
-    }
-
-    @After
-    public void clearLettersGrabbed() {
-        state.getLettersGrabbed().clear();
-    }
 }
