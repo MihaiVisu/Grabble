@@ -118,5 +118,4 @@ public class WordsActivityTest {
         onView(withId(R.id.get_suggestion_button)).perform(click());
         onView(allOf(withText("buzzwig"), isDisplayed()));
     }
-
 }
