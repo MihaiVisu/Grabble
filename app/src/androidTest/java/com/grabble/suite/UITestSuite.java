@@ -1,7 +1,6 @@
 package com.grabble.suite;
 
 import com.grabble.BaseButtonsTest;
-import com.grabble.WordsActivity;
 import com.grabble.WordsActivityTest;
 
 import org.junit.runner.RunWith;
