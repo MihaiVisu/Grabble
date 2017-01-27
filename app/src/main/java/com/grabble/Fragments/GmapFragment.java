@@ -478,6 +478,7 @@ public class GmapFragment extends Fragment implements
             state.addDistance(dist[0]);
         }
         oldLocation = location;
+        mLastLocation = location;
         state.checkMilestones(snackbar);
         System.out.println("Location Changed " + location.toString() + " distance:" +
                 state.getDistanceTraveled());
