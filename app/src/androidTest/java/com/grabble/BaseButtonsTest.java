@@ -6,6 +6,8 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.widget.EditText;
 
+import com.grabble.customclasses.GameState;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -17,24 +19,23 @@ import static android.support.test.espresso.action.ViewActions.pressBack;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.Matchers.allOf;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class BaseButtonsTest {
 
-    private String username, displayedName;
+    private GameState state;
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>
             (MainActivity.class);
 
-    @Before
-    public void getUsername() {
-        EditText te = (EditText) mActivityRule.getActivity().findViewById(R.id.editText);
-        username = te.getText().toString();
 
-        displayedName = "Hello";
+    @Before
+    public void getState() {
+        state = (GameState) mActivityRule.getActivity().getApplicationContext();
     }
 
     @Test
@@ -58,10 +59,12 @@ public class BaseButtonsTest {
                 .perform(click());
         onView(allOf(withId(R.id.action_settings), isDisplayed()))
                 .perform(click());
-        onView(allOf(withText("Enable Night Mode"), isDisplayed()));
+        onView(allOf(withText("Enable Night Mode"), isDisplayed()))
+                .perform(click());
+        // set state if updated
+        assertEquals(state.getNightMode(), true);
         pressBack();
         onView(allOf(withId(R.id.header_user_name), isDisplayed()));
-
     }
 
 
