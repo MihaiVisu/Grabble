@@ -10,7 +10,6 @@ import android.text.SpannableStringBuilder;
 import android.text.style.ImageSpan;
 import android.util.Pair;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.grabble.Fragments.GmapFragment;
 import com.grabble.NavActivity;
@@ -34,7 +33,8 @@ import java.util.concurrent.Callable;
 
 /**
  * Class which keeps track of the current state of the user variables
- * throughout the game, like a singleton.
+ * throughout the game, like a singleton, making it easier to access
+ * several state related variables anywhere in the app
  */
 public class GameState extends Application {
 
@@ -203,13 +203,6 @@ public class GameState extends Application {
         return losProgress;
     }
 
-    public boolean getProgressStarted() {
-        return progressStarted;
-    }
-
-    public void setProgressStarted(boolean progressStarted) {
-        this.progressStarted = progressStarted;
-    }
 
     public ArrayList<Achievement> getAchievements() {
         return achievements;
@@ -402,37 +395,22 @@ public class GameState extends Application {
         this.username = username;
     }
 
-    public void setTotalScore(int totalScore) {
-        this.totalScore = totalScore;
-    }
 
     public void setGems(int gems) {
         this.gems = gems;
     }
 
-    public void setTokens(int tokens) {
-        this.tokens = tokens;
-    }
 
-    public void setLosBoosters(int losBoosters) {
-        this.losBoosters = losBoosters;
-    }
 
     public void setWordHelpers(int wordHelpers) {
         this.wordHelpers = wordHelpers;
     }
 
-    public void setLettersGrabbed(HashMap<String, Integer> lettersGrabbed) {
-        this.lettersGrabbed = lettersGrabbed;
-    }
 
     public void setLosProgress(int losProgress) {
         this.losProgress = losProgress;
     }
 
-    public void setDistanceTraveled(int distanceTraveled) {
-        this.distanceTraveled = distanceTraveled;
-    }
 
     public void useLosBooster() {
         losBoosters -= 1;
@@ -444,18 +422,6 @@ public class GameState extends Application {
 
     public void addDistance(double distance) {
         this.distanceTraveled += distance;
-    }
-
-    public void setWordsCreated(HashMap<String, Integer> wordsCreated) {
-        this.wordsCreated = wordsCreated;
-    }
-
-    public void setMarkersGrabbed(HashSet<String> markersGrabbed) {
-        this.markersGrabbed = markersGrabbed;
-    }
-
-    public void setWordsList(HashSet<String> wordsList) {
-        this.wordsList = wordsList;
     }
 
     // custom query and update methods

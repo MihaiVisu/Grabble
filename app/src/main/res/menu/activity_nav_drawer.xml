@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:id="@+id/nav_statistics">
+    <group>
         <item
             android:id="@+id/nav_profile"
             android:title="@string/menu_profile" />
@@ -13,7 +13,7 @@
             android:title="@string/menu_shop" />
     </group>
 
-    <group android:id="@+id/nav_menu">
+    <group>
         <item
             android:id="@+id/nav_map"
             android:icon="@android:drawable/ic_dialog_map"

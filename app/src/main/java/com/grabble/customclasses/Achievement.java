@@ -5,12 +5,18 @@ import android.widget.ImageView;
 
 import java.util.concurrent.Callable;
 
+
+/**
+ * achievement class
+ */
 public class Achievement {
 
     private String text;
     private int tokenReward, gemReward;
     private int imgId;
     private boolean achieved;
+    // it contains a callable method which implements a function
+    // returning a boolean to check whether the achievement has been reached or not
     private Callable<Boolean> callable;
 
     public Achievement(String text, int tokenReward, int gemReward, int imgId,
@@ -27,6 +33,7 @@ public class Achievement {
         return achieved;
     }
 
+    // function to check the milestone of the achievement
     public void checkMilestone() throws Exception {
         try {
             achieved = callable.call();
@@ -47,6 +54,7 @@ public class Achievement {
         return imgId;
     }
 
+    // function to format the reward to text
     public String getRewardText() {
         String reward = "Reward: ";
         if (tokenReward > 0) {

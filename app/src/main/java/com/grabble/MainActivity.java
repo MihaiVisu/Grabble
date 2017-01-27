@@ -91,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                             public void onCompleted(JSONObject object, GraphResponse response) {
                                 try {
                                     state.setUsername(object.get("name").toString());
+                                    editText.setText(state.getUsername());
                                 }
                                 catch (JSONException e) {
                                     e.printStackTrace();
