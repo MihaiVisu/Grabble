@@ -89,8 +89,6 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
                 request.executeAsync();
 
-                Intent i = new Intent(context, NavActivity.class);
-                startActivity(i);
 
             }
 
