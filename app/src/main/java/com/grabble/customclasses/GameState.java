@@ -91,6 +91,7 @@ public class GameState extends Application {
 
         context = getApplicationContext();
 
+        // set the state variables from shared preferences
         prefs = context.getSharedPreferences("gamestate", MODE_PRIVATE);
 
         username = prefs.getString("username", "Player");
@@ -104,6 +105,7 @@ public class GameState extends Application {
         nightMode = prefs.getBoolean("nightMode", false);
 
         try {
+            // get data structures from internal storage
             File internalFile = new File(context.getFilesDir(), "internalFile.txt");
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream(internalFile));
 
@@ -123,6 +125,7 @@ public class GameState extends Application {
         catch (Exception e) {
             e.printStackTrace();
         }
+        // initialize new variables if internal memory file not found
         finally {
             if (lettersGrabbed == null) {
                 lettersGrabbed = new HashMap<>();
@@ -159,6 +162,8 @@ public class GameState extends Application {
             }
         }
 
+        // initialize the sorted array list of words
+        // in terms of their score
         if (!wordsList.isEmpty() && sortedWordsList == null) {
             sortedWordsList = new ArrayList<>();
             for (String word : wordsList) {
@@ -231,10 +236,12 @@ public class GameState extends Application {
         }
     }
 
+    //show achievements snackbar when achievement is unlocked
     private void showAchievementSnackbar(Snackbar snackbar, Achievement achievement) {
         SpannableStringBuilder builder = new SpannableStringBuilder();
         String message = "New Achievement: " + achievement.getText() + "   ";
         builder.append(message);
+        // set achievement message icon
         Drawable icon = getDrawable(achievement.getImgId());
         icon.setBounds(0,0,80,80);
         builder.setSpan(new ImageSpan(icon), builder.length()-1, builder.length(), 0);
@@ -244,6 +251,8 @@ public class GameState extends Application {
 
     // function to initialize the achievements
     public void initializeAchievements() {
+        // initialize achievements with callables to check
+        // the unlocked status
         if (achievements == null) {
             achievements = new ArrayList<>();
             achievements.add(new Achievement("Create first word", 50, 1, R.drawable.pacifier,
@@ -320,6 +329,7 @@ public class GameState extends Application {
                         }
                     }));
         }
+        // initialize the array of statuses of the achievements
         if (achievementState == null || achievementState.size() == 0) {
             // initialize array of achievement state
             achievementState = new ArrayList<>(achievements.size());
@@ -454,10 +464,12 @@ public class GameState extends Application {
         return scores[(int)letter.charAt(0)-'a'];
     }
 
+    // increment the progress of line of sight status
     public void incrementLosProgress() {
         losProgress++;
     }
 
+    // add new letter to group of letters grabbed
     public void addNewLetter(String letter) {
         letter = letter.toLowerCase();
         Integer freqOfLetter = lettersGrabbed.get(letter);
@@ -469,6 +481,8 @@ public class GameState extends Application {
         }
     }
 
+    // remove letter from group of letters grabbed
+    // when a new word has been created
     public void removeLetter(String letter) {
         if (lettersGrabbed.containsKey(letter)) {
             Integer freq = lettersGrabbed.get(letter);
@@ -481,14 +495,19 @@ public class GameState extends Application {
         }
     }
 
+    // get payment request for the fictive payment method
+    // with braintree
     public int getPaymentRequest() {
         return paymentRequest;
     }
 
+    // get payment price
     public double getPaymentPrice() {
         return paymentPrice;
     }
 
+    // set payment request for the fictive paument method
+    // with braintree
     public void setPaymentRequest(int amount, double price) {
         paymentRequest = amount;
         paymentPrice = price;
@@ -498,10 +517,13 @@ public class GameState extends Application {
         removeLetter(String.valueOf(letter));
     }
 
+    // add new marker to list of grabbed markers
+    // this is done to prevent adding same marker twice
     public void addNewMarker(String markerId) {
         markersGrabbed.add(markerId);
     }
 
+    // calculate score of a word
     public int calculateWordScore(String word) {
         int score = 0;
         for (char c : word.toLowerCase().toCharArray()) {
@@ -510,6 +532,7 @@ public class GameState extends Application {
         return score;
     }
 
+    // add new word to list of words
     public void addNewWord(String word) {
         int score = calculateWordScore(word);
         wordsCreated.put(word, score);
@@ -535,6 +558,7 @@ public class GameState extends Application {
         }
     }
 
+    // change measurement in pixels to dp
     public int changePixelToDp(int sizeInDp) {
         return (int)(getResources().getDisplayMetrics().density*sizeInDp + 0.5f);
     }
